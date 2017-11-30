@@ -54,7 +54,7 @@ function Get-MCASCredential
     (
         # Specifies the URL of your CAS tenant, for example 'contoso.portal.cloudappsecurity.com'.
         [Parameter(Mandatory=$false)]
-        [ValidateScript({($_.EndsWith('.us.portal.cloudappsecurity.com') -or $_.EndsWith('.eu.portal.cloudappsecurity.com'))})]
+        [ValidateNotNullOrEmpty()]
         [string]$TenantUri,
 
         # Specifies that the credential should be returned into the pipeline for further processing.
@@ -71,6 +71,14 @@ function Get-MCASCredential
         # Else, prompt for both the tenant and OAuth token and get it all into a global variable
         Else {
             [System.Management.Automation.PSCredential]$Global:CASCredential = Get-Credential -Message "Enter the CAS tenant and OAuth token"
+        }
+
+        if (!($CASCredential.GetNetworkCredential().username).EndsWith('.us.portal.cloudappsecurity.com') -or ($_.GetNetworkCredential().username).EndsWith('.eu.portal.cloudappsecurity.com')) {
+            throw "Invalid tenant uri specified as the username of the credential. Format should be <tenantname>.<tenantregion>.portal.cloudappsecurity.com. For example, contoso.us.portal.cloudappsecurity.com or tailspintoys.eu.portal.cloudappsecurity.com."
+        }
+        
+        if (!($CASCredential.GetNetworkCredential().Password -match '\b[0-9a-f]{64}\b')) {
+            throw "Invalid oauth token specified as the password of the credential. It should be 64 hexadecimal characters."
         }
 
         # If -PassThru is specified, write the credential object to the pipeline (the global variable will also be exported to the calling session with Export-ModuleMember)
