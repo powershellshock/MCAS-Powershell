@@ -1,34 +1,12 @@
-
-
-
 <#
 
-GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE
+GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
 
-    - Variables:
-        - Most variables should be lower case for first letter of first word, then uppercase first letter of subsequent words. eg - $myVariableExample
-        - Parameter variables should be upper case for first letter of every word. eg - $MyParameter
-    - Keywords:
-        - Keywords should be all lower case. eg - 'if', 'else', 'do', 'while', 'enum', '[int]', '[string]'
-    - Commands:
-        - Powershell command/cmdlet case should be match the case of how the command is defined and auto-completes. eg - Get-ChildItem
-    - Code blocks:
-        - Curly braces for code blocks should follow:
-            - Open curly braces should be at the end of the line of code that opens the block's context. eg - if ($true) {
-            - Close curly braces should be indented to the same level as the line of code containing the opening curly brace:
-                if ($true) {
-                    # code
-                }
-    - Comments:
-        - Comments should be achieved via Write-Verbose, in most cases, to enable descriptive verbosity during execution
-        - Comments for which Write-Verbose is not appropriate can be done, as needed/appropriate on separate lines or at the end of a line
-    - Checks for $null:
-        - $null must be left of the operator, not to the right. eg - if ($null -eq $myVar)
+    https://github.com/PoshCode/PowerShellPracticeAndStyle
 
+    and
 
-
-    - exceptions to these standards:
-        - Especially if readability is improved by violating these standards in certain bits of code, it is ok
+    https://msdn.microsoft.com/en-us/library/dd878270%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396 
 
 #>
 
@@ -50,7 +28,7 @@ enum mcas_app {
     Okta = 10980
     Salesforce = 11114
     ServiceNow = 14509
-    }
+}
 
 enum device_type {
     BARRACUDA = 101
@@ -80,7 +58,7 @@ enum device_type {
     WEBSENSE_V7_5 = 135
     ZSCALER = 120
     ZSCALER_QRADAR = 170
-    }
+}
 
 enum ip_category {
     None = 0
@@ -89,19 +67,19 @@ enum ip_category {
     Risky = 3
     VPN = 4
     Cloud_Provider = 5
-    }
+}
 
 enum severity_level {
     High = 2
     Medium = 1
     Low = 0
-    }
+}
 
 enum resolution_status {
     Resolved = 2
     Dismissed = 1
     Open = 0
-    }
+}
 
 enum file_type {
     Other = 0
@@ -111,7 +89,7 @@ enum file_type {
     Text = 4
     Image = 5
     Folder = 6
-    }
+}
 
 enum file_access_level {
     Private = 0
@@ -119,7 +97,7 @@ enum file_access_level {
     External = 2
     Public = 3
     PublicInternet = 4
-    }
+}
 
 enum subnet_category {
     Corporate = 1
@@ -128,7 +106,7 @@ enum subnet_category {
     VPN = 4
     CloudProvider = 5
     Other = 6
-    }
+}
 
 enum app_category {
     ACCOUNTING_AND_FINANCE
@@ -169,12 +147,12 @@ enum app_category {
     WEB_ANALYTICS
     WEBMAIL
     WEBSITE_MONITORING
-    }
+}
 
 enum permission_type {
     READ_ONLY
     FULL_ACCESS
-    }
+}
 
 
 #----------------------------Hash Tables---------------------------
@@ -202,7 +180,7 @@ $IPTagsList = @{
     Tor = '2dfa95cd7922d979d66fcff5'
     Yammer = '0000001b0000000000000000'
     Zscaler = '000000160000000000000000'
-    }
+}
 
 $ReportsList = @{
 	'Activity by Location' = 'geolocation_summary'
@@ -227,7 +205,9 @@ $ReportsList = @{
 
 # Create reversed copy of the reports list hash table (keys become values and values become keys)
 $ReportsListReverse = @{}
-$ReportsList.GetEnumerator() | ForEach-Object {$ReportsListReverse.Add($_.Value,$_.Key)}
+$ReportsList.GetEnumerator() | ForEach-Object {
+    $ReportsListReverse.Add($_.Value,$_.Key)
+}
 
 $GovernanceStatus = @{
     'Failed' = $false
@@ -251,7 +231,9 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 #----------------------------Exports---------------------------
 # Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the manifest as the 'FunctionsToExport' value
 $ExportedCommands = @('Get-MCASCredential','Get-MCASActivityType','Get-MCASAppId','Get-MCASDiscoverySampleLog','Get-MCASUserGroup')
-$ExportedCommands | ForEach-Object {Export-ModuleMember -Function $_}
+$ExportedCommands | ForEach-Object {
+    Export-ModuleMember -Function $_
+}
 
 #Export-ModuleMember -Function Invoke-MCASRestMethod2
 
