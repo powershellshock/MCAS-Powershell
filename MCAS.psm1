@@ -242,7 +242,7 @@ $GovernanceStatus = @{
 # get the path of where the module is saved (if module is at c:\myscripts\module.psm1, then c:\myscripts\)
 $mypath = (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)
 
-#find all the ps1 files in the Functions subfolder
+# find and load all the ps1 files in the Functions subfolder
 Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
     . $_.ProviderPath
 }
@@ -250,7 +250,7 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 
 #----------------------------Exports---------------------------
 # Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the manifest as the 'FunctionsToExport' value
-$ExportedCommands = @('Get-MCASActivityTypes','Get-MCASAppId','Get-MCASDiscoverySampleLogs','Get-MCASUserGroup')
+$ExportedCommands = @('Get-MCASCredential','Get-MCASActivityType','Get-MCASAppId','Get-MCASDiscoverySampleLog','Get-MCASUserGroup')
 $ExportedCommands | ForEach-Object {Export-ModuleMember -Function $_}
 
 #Export-ModuleMember -Function Invoke-MCASRestMethod2

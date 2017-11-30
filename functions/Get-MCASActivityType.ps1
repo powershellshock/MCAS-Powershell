@@ -1,4 +1,4 @@
-function Get-MCASActivityTypes
+function Get-MCASActivityType
 {
     [CmdletBinding()]
     Param

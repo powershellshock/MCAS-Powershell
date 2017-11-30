@@ -2,22 +2,22 @@
 .Synopsis
    Retrieves one or more sample discovery logs in a specified .
 .DESCRIPTION
-   Get-MCASDiscoverySampleLogs gets the sample log files that are available for the specified device type.
+   Get-MCASDiscoverySampleLog gets the sample log files that are available for the specified device type.
 
 .EXAMPLE
-   Get-MCASDiscoverySampleLogs
+   Get-MCASDiscoverySampleLog
 
-    C:\>Get-MCASDiscoverySampleLogs -DeviceType CHECKPOINT
+    C:\>Get-MCASDiscoverySampleLog -DeviceType CHECKPOINT
 
     C:\Users\alice\check-point_demo_log\check-point-2_demo_log.log
     C:\Users\alice\check-point_demo_log\check-point_demo_log.log
 
 .FUNCTIONALITY
-   Get-MCASDiscoverySampleLogs is intended to download the sample log files that are available for the specified device type. It downloads these as compressed zip files,
+   Get-MCASDiscoverySampleLog is intended to download the sample log files that are available for the specified device type. It downloads these as compressed zip files,
    then extracts the text log files from the zip files to a newly created subdirectory of the current. It returns the full path to each sample log it extracts, unless
    the -Quiet switch is specified, in which case it returns nothing.
 #>
-function Get-MCASDiscoverySampleLogs {
+function Get-MCASDiscoverySampleLog {
     [CmdletBinding()]
     param
     (

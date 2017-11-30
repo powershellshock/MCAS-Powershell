@@ -49,7 +49,6 @@
 function Get-MCASCredential
 {
     [CmdletBinding()]
-    [Alias('Get-CASCredential')]
     [OutputType([System.Management.Automation.PSCredential])]
     Param
     (
