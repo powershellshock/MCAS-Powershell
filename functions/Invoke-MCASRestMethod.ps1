@@ -4,33 +4,48 @@
         # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({
+            ($_.GetNetworkCredential().username).EndsWith('.us.portal.cloudappsecurity.com') -or ($_.GetNetworkCredential().username).EndsWith('.eu.portal.cloudappsecurity.com')
+        })]
+        [ValidateScript({
+            $_.GetNetworkCredential().Password.ToLower() -match ('\b[0-9a-f]{64}\b')
+        })]
         [System.Management.Automation.PSCredential]$Credential,
 
+        # Specifies the relative path of the full uri being invoked (e.g. - '/api/v1/alerts/')
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({
+            $_.StartsWith('/')
+        })]
         [string]$Path,
 
+        # Specifies the HTTP method to be used for the request
         [Parameter(Mandatory=$true)]
         [ValidateSet('Get','Post','Put','Delete')]
         [string]$Method,
 
+        # Specifies the body of the request, not including MCAS query filters, which should be specified separately in the -FilterSet parameter
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         $Body,
 
+        # Specifies the content type to be used for the request
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string]$ContentType = 'application/json',
 
+        # Specifies the MCAS query filters to be used, which will be added to the body of the message
         [Parameter(Mandatory=$false)]
         [ValidateNotNull()]
         $FilterSet,
 
-        # Specifies the retry interval, in seconds, if a call to the MCAS web API is throttled. Default = 5
+        # Specifies the retry interval, in seconds, if a call to the MCAS web API is throttled. Default = 5 (seconds)
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        $RetryInterval = 5,
+        [int]$RetryInterval = 5,
 
+        # Specifies use Invoke-WebRequest instead of Invoke-RestMethod, enabling the caller to get the raw response from the MCAS API without any JSON conversion 
         [switch]$Raw
     )
 
@@ -54,14 +69,16 @@
     $token = $Credential.GetNetworkCredential().Password.ToLower()
     Write-Verbose "Token is $token"
 
-    $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {"@{$_}"}
+    $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {
+        "@{$_}"
+    }
     Write-Verbose "Request headers are $headers"
 
     # Construct base MCAS call before processing -Body and -FilterSet
     $mcasCall = '{0} -Uri ''https://{1}{2}'' -Method {3} -Headers {4} -ContentType {5}' -f $cmd, $tenant, $Path, $Method, $headers, $ContentType
 
     if ($Method -eq 'Get') {
-        Write-Verbose "The http method 'Get' does not allow a message body to be sent."
+        Write-Verbose "A request using the Get HTTP method cannot have a message body."
     }
     else {
         $jsonBody = $Body | ConvertTo-Json -Compress -Depth 2
