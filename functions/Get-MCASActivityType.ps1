@@ -42,7 +42,7 @@ function Get-MCASActivityType
         $Response = $Response | Add-Member -NotePropertyName 'app' -NotePropertyValue ($AppId -as [mcas_app]) -PassThru
 
         Write-Verbose "Selecting properties to be returned"
-        $Response = $Response | select name,app,types,id
+        $Response = $Response | Select-Object -Property name,app,types,id
 
         $response
     }
