@@ -32,7 +32,7 @@ function Get-MCASActivityType
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/audits/type/?servicesFilter=eq(i%3A$AppId%2C)&max=500&search=" -Method Get
         }
             catch {
-                throw "Error calling MCAS API. Exception was $_"
+                throw "Error calling MCAS API. The exception was: $_"
             }
 
         Write-Verbose "Getting just the response property named 'data'"

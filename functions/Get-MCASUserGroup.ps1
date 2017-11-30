@@ -63,7 +63,7 @@ function Get-MCASUserGroup {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/user_tags/" -Body $body -Method Post
     }
         catch {
-            throw "Error calling MCAS API. Exception was $_"
+            throw "Error calling MCAS API. The exception was: $_"
         }
 
     #Test-MCASResultCount
