@@ -8,7 +8,7 @@
             ($_.GetNetworkCredential().username).EndsWith('.us.portal.cloudappsecurity.com') -or ($_.GetNetworkCredential().username).EndsWith('.eu.portal.cloudappsecurity.com')
         })]
         [ValidateScript({
-            $_.GetNetworkCredential().Password.ToLower() -match ('\b[0-9a-f]{64}\b')
+            $_.GetNetworkCredential().Password.ToLower() -match ('^[0-9a-f]{64}$')
         })]
         [System.Management.Automation.PSCredential]$Credential,
 
