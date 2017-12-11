@@ -8,7 +8,36 @@ Describe 'Module Manifest Tests' {
     }
 }
 
-$cmdsUsingCredParam = Get-Command -Module MCAS | ForEach-Object { if (($_.parameters.GetEnumerator() | Where-Object {$_.Key -eq 'Credential'}).Count -eq 1) {$_.Name}}
+
+# Tenant specific tests and test values
+$RunTenantSpecificTests = $true
+
+$TenantSpecificTestParams = @{
+    'ExampleKey' = 'ExampleValue'
+}
+
+
+# Host specific tests and test values
+$RunHostSpecificTests = $true
+
+$HostSpecificTestParams = @{
+    'ExampleKey' = 'ExampleValue'
+}
+
+
+
+
+#$TenantSpecificTestParams.ExampleKey
+
+
+
+# Get-Credential tests
+
+
+# Commands which support the -Credential parameter
+Get-Command -Module MCAS | ForEach-Object { if (($_.parameters.GetEnumerator() | Where-Object {$_.Key -eq 'Credential'}).Count -eq 1) {$_.Name}} | ForEach-Object {
+
+}
 
 
 <#
@@ -34,5 +63,15 @@ Describe 'Validating -Credential parameter' {
             }
         }
     }
+}
+#>
+
+<#
+# get the path of this test script
+$mypath = (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)
+
+# find and load all the ps1 files in the Functions subfolder
+Resolve-Path -Path $mypath\Functions\Test-*.ps1 | ForEach-Object -Process {
+    . $_.ProviderPath
 }
 #>
