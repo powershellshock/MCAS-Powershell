@@ -75,7 +75,7 @@
     Write-Verbose "Request headers are $headers"
 
     # Construct base MCAS call before processing -Body and -FilterSet
-    $mcasCall = '{0} -Uri ''https://{1}{2}'' -Method {3} -Headers {4} -ContentType {5}' -f $cmd, $tenant, $Path, $Method, $headers, $ContentType
+    $mcasCall = '{0} -Uri ''https://{1}{2}'' -Method {3} -Headers {4} -ContentType {5} -UseBasicParsing' -f $cmd, $tenant, $Path, $Method, $headers, $ContentType
 
     if ($Method -eq 'Get') {
         Write-Verbose "A request using the Get HTTP method cannot have a message body."

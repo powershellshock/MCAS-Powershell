@@ -77,7 +77,7 @@ function Get-MCASDiscoverySampleLog {
         # Download the sample log zip file
         try {
             Write-Verbose "Attempting to download $zipFile"
-            Invoke-WebRequest -Method Get -Uri "https://adaproddiscovery.blob.core.windows.net/logs/$zipFile" -OutFile $zipFile
+            Invoke-WebRequest -Method Get -Uri "https://adaproddiscovery.blob.core.windows.net/logs/$zipFile" -OutFile $zipFile -UseBasicParsing
         }
             catch {
                 throw "Could not retrieve $zipFile. Exception was $_"
