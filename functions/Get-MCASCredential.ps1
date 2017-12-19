@@ -73,10 +73,12 @@ function Get-MCASCredential
             [System.Management.Automation.PSCredential]$Global:CASCredential = Get-Credential -Message "Enter the CAS tenant and OAuth token"
         }
 
-        if (!($CASCredential.GetNetworkCredential().username).EndsWith('.us.portal.cloudappsecurity.com') -or ($_.GetNetworkCredential().username).EndsWith('.eu.portal.cloudappsecurity.com')) {
+        # Validate the tenant URI provided
+        if (!($CASCredential.GetNetworkCredential().username.EndsWith('.us.portal.cloudappsecurity.com') -or $CASCredential.GetNetworkCredential().username.EndsWith('.eu.portal.cloudappsecurity.com'))) {
             throw "Invalid tenant uri specified as the username of the credential. Format should be <tenantname>.<tenantregion>.portal.cloudappsecurity.com. For example, contoso.us.portal.cloudappsecurity.com or tailspintoys.eu.portal.cloudappsecurity.com."
         }
         
+        # Validate the token string format (does not validate the token is valid for authN/authZ)
         if (!($CASCredential.GetNetworkCredential().Password -match '\b[0-9a-f]{64}\b')) {
             throw "Invalid oauth token specified as the password of the credential. It should be 64 hexadecimal characters."
         }
