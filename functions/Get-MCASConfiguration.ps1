@@ -48,7 +48,7 @@
     @{fromDisplayName=Contoso}
 
 .FUNCTIONALITY
-   Get-MCASConfiguration is intended to return the properties of the groups that are available for use in MCAS.
+   Get-MCASConfiguration is intended to return the configuration settings of an MCAS tenant.
 #>
 function Get-MCASConfiguration {
     [CmdletBinding()]
