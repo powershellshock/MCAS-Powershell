@@ -52,7 +52,7 @@ function Get-MCASCredential
     [OutputType([System.Management.Automation.PSCredential])]
     Param
     (
-        # Specifies the URL of your CAS tenant, for example 'contoso.portal.cloudappsecurity.com'.
+        # Specifies the portal URL of your CAS tenant, for example 'contoso.portal.cloudappsecurity.com'.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string]$TenantUri,
@@ -70,7 +70,7 @@ function Get-MCASCredential
 
         # Else, prompt for both the tenant and OAuth token and get it all into a global variable
         else {
-            [System.Management.Automation.PSCredential]$Global:CASCredential = Get-Credential -Message "Enter the CAS tenant and OAuth token"
+            [System.Management.Automation.PSCredential]$Global:CASCredential = Get-Credential -Message "Enter the MCAS portal URL and OAuth token"
         }
 
         # Validate the tenant URI provided
