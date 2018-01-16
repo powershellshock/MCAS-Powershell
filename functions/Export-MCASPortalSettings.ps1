@@ -1,6 +1,6 @@
 <#
 .Synopsis
-   Exports all your portal configuration including policy rules, user groups, and IP address ranges.. 
+   Exports all your portal configuration including policy rules, user groups, and IP address ranges.
 .DESCRIPTION
    Export-MCASPortalSettings exports the portal configuration including policy rules, user groups, and IP address ranges of an MCAS tenant.
 
