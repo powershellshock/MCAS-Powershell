@@ -67,7 +67,7 @@
     Write-Verbose "Method is $Method"
 
     $token = $Credential.GetNetworkCredential().Password.ToLower()
-    Write-Verbose "Token is $token"
+    Write-Verbose "OAuth token is $token"
 
     $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {
         "@{$_}"
