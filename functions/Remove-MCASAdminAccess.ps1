@@ -1,53 +1,36 @@
 ﻿function Remove-MCASAdminAccess
 {
     [CmdletBinding()]
-    [Alias('Remove-CASAdminAccess')]
-    Param
+    param
     (
-        # Specifies the URL of your CAS tenant, for example 'contoso.portal.cloudappsecurity.com'.
-        [Parameter(Mandatory=$false)]
-        [ValidateScript({($_.EndsWith('.portal.cloudappsecurity.com') -or $_.EndsWith('.adallom.com'))})]
-        [string]$TenantUri,
-
         # Specifies the CAS credential object containing the 64-character hexadecimal OAuth token used for authentication and authorization to the CAS tenant.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [System.Management.Automation.PSCredential]$Credential,
+        [System.Management.Automation.PSCredential]$Credential = $CASCredential,
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
         [ValidateNotNullOrEmpty()]
         [string]$Username
     )
-    Begin
-    {
-        Try {$TenantUri = Select-MCASTenantUri}
-            Catch {Throw $_}
 
-        Try {$Token = Select-MCASToken}
-            Catch {Throw $_}
-    }
-    Process
-    {
-        If ((Get-MCASAdminAccess -TenantUri $TenantUri).username -notcontains $Username) {
-            Write-Warning "$Username is not listed as an administrator of Cloud App Security. No changes were made."
+    if ((Get-MCASAdminAccess -Credential $Credential).username -notcontains $Username) {
+        Write-Warning "$Username is not listed as an administrator of Cloud App Security. No changes were made."
+        }
+    else {
+        try {
+            #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/manage_admin_access/$Username/" -Token $Token -Method Delete
+            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/manage_admin_access/$Username/" -Method Delete
+        }
+            catch {
+                throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
             }
-        Else {
-            Try {
-                $Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/manage_admin_access/$Username/" -Token $Token -Method Delete
-            }
-                Catch {
-                    Throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
-                }
 
-            If ($Response.StatusCode -eq '200') {
-                Write-Verbose "$Username was removed from MCAS admin list"
-            }
-            Else {
-                Write-Error "$Username could not be removed from MCAS admin list"
-            }
+        if ($response.StatusCode -eq '200') {
+            Write-Verbose "$Username was removed from MCAS admin list"
+        }
+        else {
+            Write-Error "$Username could not be removed from MCAS admin list"
         }
     }
-    End
-    {
-    }
+
 }
