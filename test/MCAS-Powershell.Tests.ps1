@@ -43,7 +43,7 @@ $HostSpecificTestParams = @{
 
 # Commands which support the -Credential parameter
 Get-Command -Module MCAS | ForEach-Object { if (($_.parameters.GetEnumerator() | Where-Object {$_.Key -eq 'Credential'}).Count -eq 1) {$_.Name}} | ForEach-Object {
-
+    $_
 }
 
 
