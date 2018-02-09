@@ -14,23 +14,19 @@
     )
 
     if ((Get-MCASAdminAccess -Credential $Credential).username -notcontains $Username) {
-        Write-Warning "$Username is not listed as an administrator of Cloud App Security. No changes were made."
+        Write-Warning "$Username is not listed as an administrator of Cloud App Security."
         }
     else {
         try {
-            #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/manage_admin_access/$Username/" -Token $Token -Method Delete
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/manage_admin_access/$Username/" -Method Delete
         }
             catch {
-                throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
+                throw "Error calling MCAS API. The exception was: $_"
             }
-
-        if ($response.StatusCode -eq '200') {
-            Write-Verbose "$Username was removed from MCAS admin list"
-        }
-        else {
-            Write-Error "$Username could not be removed from MCAS admin list"
+        
+        Write-Verbose "Checking admin list for $Username"
+        if ((Get-MCASAdminAccess -Credential $Credential).username -contains $Username) {
+            Write-Error "Something went wrong removing $Username. The user was not removed."
         }
     }
-
 }

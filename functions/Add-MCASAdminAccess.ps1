@@ -17,36 +17,39 @@
         [permission_type]$PermissionType
     )
     begin {
-        $ReadOnlyAdded = $false
+        $readOnlyAdded = $false
+
+        $preExistingAdmins = Get-MCASAdminAccess -Credential $Credential
     }
     process {
-        if ((Get-MCASAdminAccess -Credential $Credential).username -contains $Username) {
-            Write-Warning "Add-MCASAdminAccess: $Username is already listed as an administrator of Cloud App Security. No changes were made."
+        $success = $false
+
+        if ($preExistingAdmins.username -contains $Username) {
+            Write-Warning "Add-MCASAdminAccess: $Username is already listed as an administrator of Cloud App Security."
             }
         else {
             $body = [ordered]@{'username'=$Username;'permissionType'=($PermissionType -as [string])}
 
             try {
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/manage_admin_access/" -Token $Token -Method Post -Body $Body
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/api/v1/manage_admin_access/' -Method Post -Body $body
             }
                 catch {
                     throw "Error calling MCAS API. The exception was: $_"
                 }
-                      
-            if ($Response.StatusCode -eq '200') {
-                Write-Verbose "$Username was added to MCAS admin list with $PermissionType permission"
+            
+            Write-Verbose "Checking admin list for $Username"
+            if ((Get-MCASAdminAccess -Credential $Credential).username -contains $Username) {
                 if ($PermissionType -eq 'READ_ONLY') {
-                    $ReadOnlyAdded = $true
+                    $readOnlyAdded = $true
                 }
             }
             else {
-                Write-Error "Something went wrong when attempting to add $Username to MCAS admin list with $PermissionType permission"
+                Write-Error "Something went wrong adding $Username. The user was not added."
             }
         }
     }
     end {
-        if ($ReadOnlyAdded) {
+        if ($readOnlyAdded) {
             Write-Warning "Add-MCASAdminAccess: READ_ONLY acces includes the ability to manage alerts."
         }
     }
