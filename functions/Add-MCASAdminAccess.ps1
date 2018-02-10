@@ -33,14 +33,14 @@
             try {
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/api/v1/manage_admin_access/' -Method Post -Body $body
             }
-                catch {
-                    if ($_ -like 'The remote server returned an error: (400) Bad Request.') {
-                        Write-Error "$Username could not be added as an administrator of Cloud App Security. Check the username and try again."
-                    }
-                    else {
-                        throw "Error calling MCAS API. The exception was: $_"
-                    }
+            catch {
+                if ($_ -like 'The remote server returned an error: (400) Bad Request.') {
+                    Write-Error "$Username could not be added as an administrator of Cloud App Security. Check the username and try again."
                 }
+                else {
+                    throw "Error calling MCAS API. The exception was: $_"
+                }
+            }
         }
     }
     end {

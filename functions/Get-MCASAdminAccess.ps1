@@ -12,9 +12,9 @@
     try {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/api/v1/manage_admin_access/' -Method Get
     }
-        catch {
-            throw "Error calling MCAS API. The exception was: $_"
-        }
+    catch {
+        throw "Error calling MCAS API. The exception was: $_"
+    }
 
     $response = $response.data 
     
