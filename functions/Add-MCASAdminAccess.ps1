@@ -17,15 +17,15 @@
         [permission_type]$PermissionType
     )
     begin {
+        # Keep track if any read-only access is added
         $readOnlyAdded = $false
 
+        Write-Verbose "Checking current admin list."
         $preExistingAdmins = Get-MCASAdminAccess -Credential $Credential
     }
     process {
-        $success = $false
-
         if ($preExistingAdmins.username -contains $Username) {
-            Write-Warning "Add-MCASAdminAccess: $Username is already listed as an administrator of Cloud App Security."
+            Write-Warning "$Username is already listed as an administrator of Cloud App Security."
             }
         else {
             $body = [ordered]@{'username'=$Username;'permissionType'=($PermissionType -as [string])}
@@ -34,23 +34,18 @@
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/api/v1/manage_admin_access/' -Method Post -Body $body
             }
                 catch {
-                    throw "Error calling MCAS API. The exception was: $_"
+                    if ($_ -like 'The remote server returned an error: (400) Bad Request.') {
+                        Write-Error "$Username could not be added as an administrator of Cloud App Security. Check the username and try again."
+                    }
+                    else {
+                        throw "Error calling MCAS API. The exception was: $_"
+                    }
                 }
-            
-            Write-Verbose "Checking admin list for $Username"
-            if ((Get-MCASAdminAccess -Credential $Credential).username -contains $Username) {
-                if ($PermissionType -eq 'READ_ONLY') {
-                    $readOnlyAdded = $true
-                }
-            }
-            else {
-                Write-Error "Something went wrong adding $Username. The user was not added."
-            }
         }
     }
     end {
         if ($readOnlyAdded) {
-            Write-Warning "Add-MCASAdminAccess: READ_ONLY acces includes the ability to manage alerts."
+            Write-Warning "READ_ONLY acces includes the ability to manage MCAS alerts."
         }
     }
 }

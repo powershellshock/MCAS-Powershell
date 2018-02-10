@@ -23,10 +23,5 @@
             catch {
                 throw "Error calling MCAS API. The exception was: $_"
             }
-        
-        Write-Verbose "Checking admin list for $Username"
-        if ((Get-MCASAdminAccess -Credential $Credential).username -contains $Username) {
-            Write-Error "Something went wrong removing $Username. The user was not removed."
-        }
     }
 }

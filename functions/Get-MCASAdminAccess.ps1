@@ -16,7 +16,6 @@
             throw "Error calling MCAS API. The exception was: $_"
         }
 
-    # Get the data property
     $response = $response.data 
     
     $response
