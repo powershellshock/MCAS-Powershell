@@ -45,6 +45,9 @@
         [ValidateNotNullOrEmpty()]
         [int]$RetryInterval = 5,
 
+        # Specifies that a single item is to be fetched, skipping any processing for lists, such as checking result count totals
+        #[switch]$Fetch, 
+                
         # Specifies use Invoke-WebRequest instead of Invoke-RestMethod, enabling the caller to get the raw response from the MCAS API without any JSON conversion 
         [switch]$Raw
     )
@@ -98,7 +101,8 @@
         $mcasCall = '{0} -Body ''{1}''' -f $mcasCall, $jsonBody
     }
 
-    Write-Verbose "Constructed call to MCAS is '$mcasCall'"
+    Write-Verbose "Constructed call to MCAS is to follow:"
+    Write-Verbose $mcasCall
 
     Write-Verbose "Retry interval if MCAS call is throttled is $RetryInterval seconds"
 
@@ -123,13 +127,40 @@
                     throw $_
                 }
             }
+
+        # Uncomment following two lines if you want to see raw responses in -Verbose output
+        #Write-Verbose 'MCAS response to follow:'
+        #Write-Verbose $response
     }
     while ($retryCall)
 
-    if ($null -ne $response.total) {
-        Write-Verbose ('The total number of matching records was {0}' -f ($response.total))
-        Write-Information $response.total
+    # Provide the total record count in -Verbose output and as InformationVariable, if appropriate
+    if ($response.total) {
+        Write-Verbose 'Checking total matching record count via the response properties.'
+        $recordTotal = $response.total
     }
+    elseif ($response.Content) {
+        try {
+            Write-Verbose 'Attempting to convert raw JSON response to check total matching record count.'
+            $recordTotal = ($response.Content | ConvertFrom-Json).total
+        }
+        catch {
+            Write-Verbose 'JSON conversion failed. Attempting to check raw response for total matching record count via string extraction.'
+            $response.Content.Split(',',3) | ForEach-Object {                
+                if ($_.StartsWith('"total"')) {
+                    $recordTotal = $_.Split(':')[1]
+                }
+            }
+        } 
+    }
+    else {
+        Write-Verbose 'Could not check total matching record count, perhaps because only a single item was fetched by the call.'
+    }
+
+    if ($recordTotal -ne $null) {
+        Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
+        Write-Information $recordTotal 
+    }   
 
     $response
 }
