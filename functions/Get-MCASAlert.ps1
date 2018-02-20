@@ -216,7 +216,7 @@ function Get-MCASAlert
 
             # Get the matching items and handle errors
             try {
-                $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/" -Body $body -Method Post -FilterSet $FilterSet
+                $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/" -Body $body -Method Post -FilterSet $filterSet
             }
                 catch {
                     throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
