@@ -136,21 +136,17 @@
 
     # Provide the total record count in -Verbose output and as InformationVariable, if appropriate
     if ($response.total) {
-        Write-Verbose 'Checking total matching record count via the response properties.'
+        Write-Verbose 'Checking total matching record count via the response properties...'
         $recordTotal = $response.total
     }
     elseif ($response.Content) {
         try {
-            Write-Verbose 'Attempting to convert raw JSON response to check total matching record count.'
-            $recordTotal = ($response.Content | ConvertFrom-Json).total
+            Write-Verbose 'Checking total matching record count via raw JSON response...'
+            $recordTotal = ($response.Content | ConvertFrom-Json).total   
         }
         catch {
-            Write-Verbose 'JSON conversion failed. Attempting to check raw response for total matching record count via string extraction.'
-            $response.Content.Split(',',3) | ForEach-Object {                
-                if ($_.StartsWith('"total"')) {
-                    $recordTotal = $_.Split(':')[1]
-                }
-            }
+            Write-Verbose 'JSON conversion failed. Checking total matching record count via raw response string extraction...'
+            $recordTotal = ($response.Content.Split(',',3) | Where-Object {$_.StartsWith('"total"')} | Select-Object -First 1).Split(':')[1]
         } 
     }
     else {
