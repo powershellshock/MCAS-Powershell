@@ -38,35 +38,39 @@ function Get-MCASDiscoverySampleLog {
         # Select the sample log file to download based on the specified device type
         Write-Verbose "Device type specified was $DeviceType"
         switch ($DeviceType) {
-            'BARRACUDA'             {$fileName = 'barracuda-web-app-firewall-w3c_demo_log.log'}
-            'BLUECOAT'              {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
-            'CHECKPOINT'            {$fileName = 'check-point_demo_log.log'}
-            'CISCO_ASA'             {$fileName = 'cisco-asa-firewall_demo_log.log'}
-            'CISCO_ASA_FIREPOWER'   {$fileName = 'cisco-asa-firepower_demo_log.log'}
-            'CISCO_FWSM'            {$fileName = 'cisco-fwsm_demo_log.log'}
-            'CISCO_IRONPORT_PROXY'  {$fileName = 'cisco-ironport-wsa_demo_log.log'}
-            'CISCO_SCAN_SAFE'       {$fileName = 'cisco-scansafe_demo_log.log'}
-            'CLAVISTER'             {$fileName = 'clavister-ngfw-syslog_demo_log.log'}
-            'FORTIGATE'             {$fileName = 'fortinet-fortigate_demo_log.log'}
-            'JUNIPER_SRX'           {$fileName = 'juniper-srx_demo_log.log'}
-            'JUNIPER_SRX_SD'        {$fileName = 'juniper-srx-sd_demo_log.log'}
-            'JUNIPER_SRX_WELF'      {$fileName = 'juniper-srx-welf_demo_log.log'}
-            'JUNIPER_SSG'           {$fileName = 'juniper-ssg_demo_log.log'}
-            'MACHINE_ZONE_MERAKI'   {$fileName = 'meraki-urls-log_demo_log.log'}
-            'MCAFEE_SWG'            {$fileName = 'mcafee-web-gateway_demo_log.log'}
-            'MICROSOFT_ISA_W3C'     {$fileName = 'microsoft-forefront-threat-management-gateway-w3c_demo_log.log'}
-            'PALO_ALTO'             {$fileName = 'pa-series-firewall_demo_log.log'}
-            #'PALO_ALTO_SYSLOG'      {$fileName = ''} # No sample available
-            #'DIGITAL_ARTS_IFILTER'  {$fileName = 'digital-arts-i-filter_demo_log.log'}
-            'SONICWALL_SYSLOG'      {$fileName = 'sonicwall_demo_log.log'}
-            'SOPHOS_CYBEROAM'       {$fileName = 'sophos-cyberoam-web-filter-and-firewall-log_demo_log.log'}
-            'SOPHOS_SG'             {$fileName = 'sophos-sg_demo_log.log'}
-            'SQUID'                 {$fileName = 'squid-common_demo_log.log'}
-            'SQUID_NATIVE'          {$fileName = 'squid-native_demo_log.log'}
-            'WEBSENSE_SIEM_CEF'     {$fileName = 'web-security-solutions-internet-activity-log-cef_demo_log.log'}
-            'WEBSENSE_V7_5'         {$fileName = 'web-security-solutions-investigative-detail-report-csv_demo_log.log'}
-            'ZSCALER'               {$fileName = 'zscaler-default-csv_demo_log.log'}
-            'ZSCALER_QRADAR'        {$fileName = 'zscaler-qradar-leef_demo_log.log'}
+            'BARRACUDA'                     {$fileName = 'barracuda-web-app-firewall-w3c_demo_log.log'}
+            'BLUECOAT'                      {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
+            'CHECKPOINT'                    {$fileName = 'check-point_demo_log.log'}
+            'CHECKPOINT_SMART_VIEW_TRACKER' {$fileName = 'check-point-smartview-tracker_demo_log.log'}
+            'CHECKPOINT_XML = 187'          {$fileName = 'check-point-xml_demo_log.log'} 
+            'CISCO_ASA_FIREPOWER'           {$fileName = 'cisco-asa-firepower_demo_log.log'}
+            'CISCO_FWSM'                    {$fileName = 'cisco-fwsm_demo_log.log'}
+            'CISCO_IRONPORT_PROXY'          {$fileName = 'cisco-ironport-wsa_demo_log.log'}
+            'CISCO_SCAN_SAFE'               {$fileName = 'cisco-scansafe_demo_log.log'}
+            'CLAVISTER'                     {$fileName = 'clavister-ngfw-syslog_demo_log.log'}
+            'FORTIGATE'                     {$fileName = 'fortinet-fortigate_demo_log.log'}
+            'GENERIC_CEF'                   {$fileName = 'generic-cef-log_demo_log.log'}
+            'GENERIC_LEEF'                  {$fileName = 'generic-leef-log_demo_log.log'} 
+            'GENERIC_W3C'                   {$fileName = 'generic-w3c-log_demo_log.log'}  
+            'I_FILTER'                      {$fileName = 'digital-arts-i-filter_demo_log.log'}
+            'JUNIPER_SRX'                   {$fileName = 'juniper-srx_demo_log.log'}
+            'JUNIPER_SRX_SD'                {$fileName = 'juniper-srx-sd_demo_log.log'}
+            'JUNIPER_SRX_WELF'              {$fileName = 'juniper-srx-welf_demo_log.log'}
+            'JUNIPER_SSG'                   {$fileName = 'juniper-ssg_demo_log.log'}
+            'MACHINE_ZONE_MERAKI'           {$fileName = 'meraki-urls-log_demo_log.log'}
+            'MCAFEE_SWG'                    {$fileName = 'mcafee-web-gateway_demo_log.log'}
+            'MICROSOFT_ISA_W3C'             {$fileName = 'microsoft-forefront-threat-management-gateway-w3c_demo_log.log'}
+            'PALO_ALTO'                     {$fileName = 'pa-series-firewall_demo_log.log'}
+            #'PALO_ALTO_SYSLOG'              {$fileName = ''} # No sample available
+            'SONICWALL_SYSLOG'              {$fileName = 'sonicwall_demo_log.log'}
+            'SOPHOS_CYBEROAM'               {$fileName = 'sophos-cyberoam-web-filter-and-firewall-log_demo_log.log'}
+            'SOPHOS_SG'                     {$fileName = 'sophos-sg_demo_log.log'}
+            'SQUID'                         {$fileName = 'squid-common_demo_log.log'}
+            'SQUID_NATIVE'                  {$fileName = 'squid-native_demo_log.log'}
+            'WEBSENSE_SIEM_CEF'             {$fileName = 'web-security-solutions-internet-activity-log-cef_demo_log.log'}
+            'WEBSENSE_V7_5'                 {$fileName = 'web-security-solutions-investigative-detail-report-csv_demo_log.log'}
+            'ZSCALER'                       {$fileName = 'zscaler-default-csv_demo_log.log'}
+            'ZSCALER_QRADAR'                {$fileName = 'zscaler-qradar-leef_demo_log.log'}
         }
 
         $zipFile = "$fileName.zip"
