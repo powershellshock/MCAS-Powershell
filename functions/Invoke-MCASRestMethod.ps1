@@ -5,7 +5,7 @@
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({
-            ($_.GetNetworkCredential().username).EndsWith('.us.portal.cloudappsecurity.com') -or ($_.GetNetworkCredential().username).EndsWith('.eu.portal.cloudappsecurity.com')
+            ($_.GetNetworkCredential().username).EndsWith('.portal.cloudappsecurity.com')
         })]
         [ValidateScript({
             $_.GetNetworkCredential().Password.ToLower() -match ('^[0-9a-f]{64}$')
