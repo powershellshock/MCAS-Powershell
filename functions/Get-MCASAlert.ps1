@@ -226,7 +226,7 @@ function Get-MCASAlert
 
             try {
                 Write-Verbose "Adding alias property to results, if appropriate"
-                $Response = $Response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
+                $response = $response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
             }
             catch {}
 
