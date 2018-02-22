@@ -43,8 +43,8 @@ function Get-MCASDiscoverySampleLog {
             'CHECKPOINT'            {$fileName = 'check-point_demo_log.log'}
             'CISCO_ASA'             {$fileName = 'cisco-asa-firewall_demo_log.log'}
             'CISCO_ASA_FIREPOWER'   {$fileName = 'cisco-asa-firepower_demo_log.log'}
-            'CISCO_IRONPORT_PROXY'  {$fileName = 'cisco-ironport-wsa_demo_log.log'}
             'CISCO_FWSM'            {$fileName = 'cisco-fwsm_demo_log.log'}
+            'CISCO_IRONPORT_PROXY'  {$fileName = 'cisco-ironport-wsa_demo_log.log'}
             'CISCO_SCAN_SAFE'       {$fileName = 'cisco-scansafe_demo_log.log'}
             'CLAVISTER'             {$fileName = 'clavister-ngfw-syslog_demo_log.log'}
             'FORTIGATE'             {$fileName = 'fortinet-fortigate_demo_log.log'}
@@ -57,6 +57,7 @@ function Get-MCASDiscoverySampleLog {
             'MICROSOFT_ISA_W3C'     {$fileName = 'microsoft-forefront-threat-management-gateway-w3c_demo_log.log'}
             'PALO_ALTO'             {$fileName = 'pa-series-firewall_demo_log.log'}
             #'PALO_ALTO_SYSLOG'      {$fileName = ''} # No sample available
+            #'DIGITAL_ARTS_IFILTER'  {$fileName = 'digital-arts-i-filter_demo_log.log'}
             'SONICWALL_SYSLOG'      {$fileName = 'sonicwall_demo_log.log'}
             'SOPHOS_CYBEROAM'       {$fileName = 'sophos-cyberoam-web-filter-and-firewall-log_demo_log.log'}
             'SOPHOS_SG'             {$fileName = 'sophos-sg_demo_log.log'}

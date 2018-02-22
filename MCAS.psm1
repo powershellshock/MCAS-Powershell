@@ -31,33 +31,40 @@ enum mcas_app {
 }
 
 enum device_type {
-    BARRACUDA = 101
-    BLUECOAT = 102
-    CHECKPOINT = 103
-    CISCO_ASA = 104
-    CISCO_ASA_FIREPOWER = 177
-    CISCO_IRONPORT_PROXY = 106
-    CISCO_FWSM = 157
-    CISCO_SCAN_SAFE = 124
-    CLAVISTER = 164
-    FORTIGATE = 108
-    JUNIPER_SRX = 129
-    JUNIPER_SRX_SD = 172
-    JUNIPER_SRX_WELF = 174
-    JUNIPER_SSG = 168
-    MACHINE_ZONE_MERAKI = 153
-    MCAFEE_SWG = 121
-    MICROSOFT_ISA_W3C = 159
-    PALO_ALTO = 112  #PALO_ALTO_SYSLOG not available here
-    SONICWALL_SYSLOG = 160
-    SOPHOS_CYBEROAM = 162
-    SOPHOS_SG = 130
-    SQUID = 114
-    SQUID_NATIVE = 155
-    WEBSENSE_SIEM_CEF = 138
-    WEBSENSE_V7_5 = 135
-    ZSCALER = 120
-    ZSCALER_QRADAR = 170
+    BARRACUDA = 101                     # Barracuda - Web App Firewall (W3C)
+    BLUECOAT = 102                      # Blue Coat ProxySG - Access log (W3C)
+    CHECKPOINT = 103                    # Check Point (CSV)
+    #CHECKPOINT_XML = 187                # Check Point (XML)
+    #CHECKPOINT_SMARTVIEW_TRACKER = 189  # Check Point - SmartView Tracker
+    CISCO_ASA = 104                     # Cisco ASA Firewall
+    CISCO_ASA_FIREPOWER = 177           # Cisco ASA FirePOWER
+    CISCO_FWSM = 157                    # Cisco FWSM
+    CISCO_IRONPORT_PROXY = 106          # CiscoIronPort WSA
+    CISCO_SCAN_SAFE = 124               # Cisco ScanSafe
+    CLAVISTER = 164                     # Clavister NGFW (Syslog)
+    #DIGITAL_ARTS_IFILTER = 185          # Digital Arts i-FILTER
+    FORTIGATE = 108                     # Fortinet Fortigate
+    #GENERIC_CEF = 179                   # Generic CEF log
+    #GENERIC_LEEF = 181                  # Generic LEEF log
+    #GENERIC_W3C = 183                   # Generic W3C log
+    JUNIPER_SRX = 129                   # Juniper SRX
+    JUNIPER_SRX_SD = 172                # Juniper SRX SD
+    JUNIPER_SRX_WELF = 174              # Juniper SRX Welf
+    JUNIPER_SSG = 168                   # Juniper SSG
+    MACHINE_ZONE_MERAKI = 153           # Meraki - URLs log
+    MCAFEE_SWG = 121                    # McAfee Web Gateway
+    MICROSOFT_ISA_W3C = 159             # Microsoft Forefront Threat Management Gateway (W3C)
+    PALO_ALTO = 112                     # PA Series Firewall 
+    # PALO_ALTO_SYSLOG not available here
+    SONICWALL_SYSLOG = 160              # (Dell) SonicWALL
+    SOPHOS_CYBEROAM = 162               # Sophos Cyberoam Web Filter and Firewall log
+    SOPHOS_SG = 130                     # Sophos SG
+    SQUID = 114                         # Squid (Common)
+    SQUID_NATIVE = 155                  # Squid (Native)
+    WEBSENSE_SIEM_CEF = 138             # (WebSense) Web Security solutions - Internet Activity log (CEF)
+    WEBSENSE_V7_5 = 135                 # (WebSense) Web Security solutions - Investigative detail report (CSV)
+    ZSCALER = 120                       # Zscaler - Default CSV
+    ZSCALER_QRADAR = 170                # Zscaler - QRadar LEEF
 }
 
 enum ip_category {
