@@ -198,7 +198,17 @@ function Get-MCASActivity
 
         # Limits the results to non-impersonated events if specified.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
-        [switch]$ImpersonatedNot
+        [switch]$ImpersonatedNot,
+
+        # Limits the results to those with user agent strings containing the specified substring.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$UserAgentContains,
+
+        # Limits the results to those with user agent strings not containing the specified substring..
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$UserAgentNotContains
     )
     begin {
     }
