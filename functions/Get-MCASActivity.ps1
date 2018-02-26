@@ -292,7 +292,7 @@ function Get-MCASActivity
             If ($AppName)    {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
             If ($AppNameNot) {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
             If ($IPTag)      {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
-            If ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            If ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTagNot.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
 
             # Simple filters
             If ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}
