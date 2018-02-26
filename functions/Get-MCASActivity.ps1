@@ -111,6 +111,16 @@ function Get-MCASActivity
         [ValidateNotNullOrEmpty()]
         [string[]]$EventTypeNameNot,
 
+        # Limits the results to items of specified action type name, such as '11161:EVENT_AAD_LOGIN:OAuth2:Authorize'
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$ActionTypeName,
+
+        # Limits the results to items not of specified action type name, such as '11161:EVENT_AAD_LOGIN:OAuth2:Authorize'
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$ActionTypeNameNot,
+
         # Limits the results by ip category. Possible Values: 'None','Internal','Administrative','Risky','VPN','Cloud_Provider'.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -281,8 +291,10 @@ function Get-MCASActivity
             If ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}
             If ($AppId)                {$filterSet += @{'service'=                @{'eq'=$AppId}}}
             If ($AppIdNot)             {$filterSet += @{'service'=                @{'neq'=$AppIdNot}}}
-            If ($EventTypeName)        {$filterSet += @{'activity.actionType'=    @{'eq'=$EventTypeName}}}
-            If ($EventTypeNameNot)     {$filterSet += @{'activity.actionType'=    @{'neq'=$EventTypeNameNot}}}
+            If ($EventTypeName)        {$filterSet += @{'activity.eventType'=    @{'eq'=$EventTypeName}}}
+            If ($EventTypeNameNot)     {$filterSet += @{'activity.eventType'=    @{'neq'=$EventTypeNameNot}}}
+            If ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$EventTypeName}}}
+            If ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$EventTypeNameNot}}}
             If ($CountryCodePresent)   {$filterSet += @{'location.country'=       @{'isset'=$true}}}
             If ($DeviceType)           {$filterSet += @{'device.type'=            @{'eq'=$DeviceType.ToUpper()}}} # CAS API expects upper case here
             If ($UserAgentContains)    {$filterSet += @{'userAgent.userAgent'=    @{'contains'=$UserAgentContains}}}
