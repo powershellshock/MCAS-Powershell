@@ -179,6 +179,12 @@ function Get-MCASActivity
         [validateset('Akamai_Technologies','Amazon_Web_Services','Anonymous_proxy','Ascenty_Data_Centers','Botnet','Brute_force_attacker','Cisco_CWS','Cloud_App_Security_network','Darknet_scanning_IP','Exchange_Online','Exchange_Online_Protection','Google_Cloud_Platform','Internal_Network_IP','Malware_CnC_server','Masergy_Communications','McAfee_Web_Gateway','Microsoft_Azure','Microsoft_Cloud','Microsoft_Hosting','Microsoft_authentication_and_identity','Office_365','Office_365_Planner','Office_365_ProPlus','Office_Online','Office_Sway','Office_Web_Access_Companion','OneNote','Remote_Connectivity_Analyzer','Salesforce_Cloud','Satellite_provider','ScanSafe','SharePoint_Online','Skype_for_Business_Online','Symantec_Cloud','Tor','Yammer','Zscaler')]
         [string[]]$IPTag,
 
+        # Limits the results to events listed for the specified IP Tags.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [validateset('Akamai_Technologies','Amazon_Web_Services','Anonymous_proxy','Ascenty_Data_Centers','Botnet','Brute_force_attacker','Cisco_CWS','Cloud_App_Security_network','Darknet_scanning_IP','Exchange_Online','Exchange_Online_Protection','Google_Cloud_Platform','Internal_Network_IP','Malware_CnC_server','Masergy_Communications','McAfee_Web_Gateway','Microsoft_Azure','Microsoft_Cloud','Microsoft_Hosting','Microsoft_authentication_and_identity','Office_365','Office_365_Planner','Office_365_ProPlus','Office_Online','Office_Sway','Office_Web_Access_Companion','OneNote','Remote_Connectivity_Analyzer','Salesforce_Cloud','Satellite_provider','ScanSafe','SharePoint_Online','Skype_for_Business_Online','Symantec_Cloud','Tor','Yammer','Zscaler')]
+        [string[]]$IPTagNot,
+
         # Limits the results to events that include a country code value.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [switch]$CountryCodePresent,
@@ -285,7 +291,8 @@ function Get-MCASActivity
             If ($IpCategory) {$filterSet += @{'ip.category'=@{'eq'=([int[]]($IpCategory | ForEach-Object {$_ -as [int]}))}}}
             If ($AppName)    {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
             If ($AppNameNot) {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
-            If ($IPTag)      {$filterSet += @{'ip.tags'=    @{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            If ($IPTag)      {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            If ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
 
             # Simple filters
             If ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}
