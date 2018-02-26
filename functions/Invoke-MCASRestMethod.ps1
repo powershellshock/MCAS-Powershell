@@ -150,7 +150,7 @@
         } 
     }
     else {
-        Write-Verbose 'Could not check total matching record count, perhaps because only a single item was fetched by the call.'
+        Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned.'
     }
 
     if ($recordTotal -ne $null) {
