@@ -163,7 +163,7 @@ enum permission_type {
 
 
 #----------------------------Hash Tables---------------------------
-$IPTagsList = @{
+$IPTagsList = [ordered]@{
     Akamai_Technologies                   = '0000002d0000000000000000'
     Amazon_Web_Services                   = '000000290000000000000000'
     Anonymous_proxy                       = '000000030000000000000000'
