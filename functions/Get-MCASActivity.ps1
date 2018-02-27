@@ -149,6 +149,11 @@ function Get-MCASActivity
         # Limits the results by device type. Possible Values: 'Desktop','Mobile','Tablet','Other'.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateSet('Desktop','Mobile','Tablet','Other')]
+        [string[]]$DeviceTypeNot,
+
+        # Limits the results by device type. Possible Values: 'Desktop','Mobile','Tablet','Other'.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateSet('Desktop','Mobile','Tablet','Other')]
         [string[]]$DeviceType,
 
         # Limits the results by performing a free text search
@@ -300,14 +305,15 @@ function Get-MCASActivity
             If ($AppIdNot)             {$filterSet += @{'service'=                @{'neq'=$AppIdNot}}}
             If ($EventTypeName)        {$filterSet += @{'activity.eventType'=    @{'eq'=$EventTypeName}}}
             If ($EventTypeNameNot)     {$filterSet += @{'activity.eventType'=    @{'neq'=$EventTypeNameNot}}}
-            If ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$EventTypeName}}}
-            If ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$EventTypeNameNot}}}
+            If ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$ActionTypeName}}}
+            If ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$ActionTypeNameNot}}}
             If ($CountryCodePresent)   {$filterSet += @{'location.country'=       @{'isset'=$true}}}
             If ($DeviceType)           {$filterSet += @{'device.type'=            @{'eq'=$DeviceType.ToUpper()}}} # CAS API expects upper case here
+            If ($DeviceTypeNot)        {$filterSet += @{'device.type'=            @{'neq'=$DeviceTypeNot.ToUpper()}}} # CAS API expects upper case here
             If ($UserAgentContains)    {$filterSet += @{'userAgent.userAgent'=    @{'contains'=$UserAgentContains}}}
             If ($UserAgentNotContains) {$filterSet += @{'userAgent.userAgent'=    @{'ncontains'=$UserAgentNotContains}}}
             If ($IpStartsWith)         {$filterSet += @{'ip.address'=             @{'startswith'=$IpStartsWith}}}
-            If ($IpDoesNotStartWith)   {$filterSet += @{'ip.address'=             @{'doesnotstartwith'=$IpStartsWith}}}
+            If ($IpDoesNotStartWith)   {$filterSet += @{'ip.address'=             @{'doesnotstartwith'=$IpDoesNotStartWith}}}
             If ($Text)                 {$filterSet += @{'text'=                   @{'text'=$Text}}}
             If ($DaysAgo)              {$filterSet += @{'date'=                   @{'gte_ndays'=$DaysAgo}}}
             If ($Impersonated)         {$filterSet += @{'activity.impersonated' = @{'eq'=$true}}}
