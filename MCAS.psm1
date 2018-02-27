@@ -251,7 +251,7 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 
 #----------------------------Exports---------------------------
 # Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the manifest as the 'FunctionsToExport' value
-$ExportedCommands = @('Add-MCASAdminAccess','ConvertFrom-MCASTimestamp','Export-MCASPortalSettings','Get-MCASAdminAccess','Get-MCASActivity','Get-MCASAlert','Get-MCASConfiguration','Get-MCASCredential','Get-MCASActivityType','Get-MCASAppId','Get-MCASAppPermission','Get-MCASDiscoverySampleLog','Get-MCASTag','Get-MCASUserGroup','Remove-MCASAdminAccess')
+$ExportedCommands = @('Add-MCASAdminAccess','ConvertFrom-MCASTimestamp','Export-MCASPortalSettings','Get-MCASAdminAccess','Get-MCASActivity','Get-MCASAlert','Get-MCASConfiguration','Get-MCASCredential','Get-MCASActivityType','Get-MCASAppId','Get-MCASAppPermission','Get-MCASDiscoverySampleLog','Get-MCASPolicy','Get-MCASTag','Get-MCASUserGroup','Remove-MCASAdminAccess')
 $ExportedCommands | ForEach-Object {
     Export-ModuleMember -Function $_
 }
