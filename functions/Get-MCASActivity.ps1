@@ -193,6 +193,22 @@ function Get-MCASActivity
         # Limits the results to events that include a country code value.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [switch]$CountryCodePresent,
+
+        # Limits the results to events that include a country code value.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [switch]$CountryCodeNotPresent,
+
+        # Limits the results to events that include a country code value.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(2,2)]
+        [string[]]$CountryCode,
+
+        # Limits the results to events that include a country code value.
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(2,2)]
+        [string[]]$CountryCodeNot,
         
         # Limits the results to events listed for the specified IP Tags.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
@@ -308,6 +324,9 @@ function Get-MCASActivity
             If ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$ActionTypeName}}}
             If ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$ActionTypeNameNot}}}
             If ($CountryCodePresent)   {$filterSet += @{'location.country'=       @{'isset'=$true}}}
+            If ($CountryCodeNotPresent){$filterSet += @{'location.country'=       @{'isnotset'=$true}}}
+            If ($CountryCode)          {$filterSet += @{'location.country'=       @{'eq'=$CountryCode}}}
+            If ($CountryCodeNot)       {$filterSet += @{'location.country'=       @{'neq'=$CountryCodeNot}}}
             If ($DeviceType)           {$filterSet += @{'device.type'=            @{'eq'=$DeviceType.ToUpper()}}} # CAS API expects upper case here
             If ($DeviceTypeNot)        {$filterSet += @{'device.type'=            @{'neq'=$DeviceTypeNot.ToUpper()}}} # CAS API expects upper case here
             If ($UserAgentContains)    {$filterSet += @{'userAgent.userAgent'=    @{'contains'=$UserAgentContains}}}
