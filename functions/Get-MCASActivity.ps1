@@ -134,7 +134,7 @@ function Get-MCASActivity
         # Limits the results to items without the specified IP leading digits, such as 10.0.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateLength(1,45)]
-        [string]$IpDoesNotStartWith,
+        [string[]]$IpDoesNotStartWith,
 
         # Limits the results to items found before specified date. Use Get-Date.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
