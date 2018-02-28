@@ -85,9 +85,9 @@ function Get-MCASDiscoverySampleLog {
             Write-Verbose "Attempting to download $zipFile"
             Invoke-WebRequest -Method Get -Uri "https://adaproddiscovery.blob.core.windows.net/logs/$zipFile" -OutFile $zipFile -UseBasicParsing
         }
-            catch {
-                throw "Could not retrieve $zipFile. Exception was $_"
-            }
+        catch {
+            throw "Could not retrieve $zipFile. Exception was $_"
+        }
 
         # Cleanup the target folder, if it already exists
         if (Test-Path $targetFolder) {
@@ -96,9 +96,9 @@ function Get-MCASDiscoverySampleLog {
                 Write-Verbose "Attempting to delete the target folder $targetFolder"
                 Remove-Item $targetFolder -Recurse -Force
             }
-                catch {
-                    throw "Could not delete $targetFolder. Exception was $_"
-                }
+            catch {
+                throw "Could not delete $targetFolder. Exception was $_"
+            }
         }
 
         # Extract the files from the zip file (some contain more than one log in them)
@@ -106,18 +106,18 @@ function Get-MCASDiscoverySampleLog {
             Write-Verbose "Attempting to extract contents of $zipFile to $targetFolder"
             [io.compression.zipfile]::ExtractToDirectory($zipFile,$targetFolder)
         }
-            catch {
-                throw "Could not extract contents of $zipFile : $_"
-            }
+        catch {
+            throw "Could not extract contents of $zipFile : $_"
+        }
 
         # Clean up the zip files, since we have extracted the contents
         try {
             Write-Verbose "Attempting to delete $zipFile"
             Remove-Item $zipFile -Force
         }
-            catch {
-                Write-Warning "Could not delete $zipFile : $_"
-            }
+        catch {
+            Write-Warning "Could not delete $zipFile : $_"
+        }
 
         # Output to the caller the full path of each sample log file, unless output was suppressed
         if (!$Quiet) {
