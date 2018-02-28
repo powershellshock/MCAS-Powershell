@@ -68,15 +68,15 @@ function Get-MCASConfiguration {
 
     switch ($Settings) {
         'GeneralSettings'   {$path = '/cas/api/settings/get/'}
-        'MailSettings'      {$path = '/cas/api/mail_settings/get/'}  
+        'MailSettings'      {$path = '/cas/api/v1/mail_settings/get/'}  
     }
 
     try {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path $path -Method Get
     }
-        catch {
-            throw "Error calling MCAS API. The exception was: $_"
-        }
+    catch {
+        throw "Error calling MCAS API. The exception was: $_"
+    }
 
     $response
 }
