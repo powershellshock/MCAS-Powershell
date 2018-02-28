@@ -148,9 +148,9 @@ function Get-MCASPortalSettings {
     try {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/constants.js' -Method Get
     }
-        catch {
-            throw "Error calling MCAS API. The exception was: $_"
-        }
+    catch {
+        throw "Error calling MCAS API. The exception was: $_"
+    }
 
     $response
 }
