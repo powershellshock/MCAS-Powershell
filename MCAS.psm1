@@ -256,6 +256,7 @@ $ExportedCommands = @(
     'Get-MCASBlockScriptContent',
     'Get-MCASConfiguration',
     'Get-MCASCredential',
+    'Get-MCASDiscoveredApp',
     'Get-MCASDiscoverySampleLog',
     'Get-MCASGovernanceAction',
     'Get-MCASSubnetCollection',
@@ -263,6 +264,7 @@ $ExportedCommands = @(
     'Get-MCASPolicy',
     'Get-MCASPortalSettings',
     'Get-MCASUserGroup',
+    'Get-MCASStream'
     'New-MCASSubnetCollection',
     'Remove-MCASAdminAccess',
     'Remove-MCASSubnetCollection'
