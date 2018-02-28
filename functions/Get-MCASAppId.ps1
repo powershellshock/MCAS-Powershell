@@ -20,8 +20,7 @@ function Get-MCASAppId
     Param
     (
         # Specifies the app for which to retrieve the integer id value.
-        [Parameter(
-            Mandatory=$true, ValueFromPipeline=$true, Position=0)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, Position=0)]
         [ValidateNotNullOrEmpty()]
         [mcas_app]$AppName
     )

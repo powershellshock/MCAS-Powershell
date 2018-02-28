@@ -251,6 +251,7 @@ $ExportedCommands = @(
     'Get-MCASAdminAccess',
     'Get-MCASAlert',
     'Get-MCASAppId',
+    'Get-MCASAppInfo',
     'Get-MCASAppPermission',
     'Get-MCASBlockScriptContent',
     'Get-MCASConfiguration',
