@@ -1,4 +1,4 @@
-function Get-MCASIPRange
+function Get-MCASIPRangeSet
 {
     [CmdletBinding()]
     Param

@@ -69,11 +69,12 @@ enum device_type {
 
 enum ip_category {
     None = 0
-    Internal = 1
+    Corporate = 1
     Administrative = 2
     Risky = 3
     VPN = 4
     Cloud_Provider = 5
+    Other = 6
 }
 
 enum severity_level {
@@ -104,15 +105,6 @@ enum file_access_level {
     External = 2
     Public = 3
     PublicInternet = 4
-}
-
-enum subnet_category {
-    Corporate = 1
-    Administrative = 2
-    Risky = 3
-    VPN = 4
-    CloudProvider = 5
-    Other = 6
 }
 
 enum app_category {
@@ -265,11 +257,12 @@ $ExportedCommands = @(
     'Get-MCASCredential',
     'Get-MCASDiscoverySampleLog',
     'Get-MCASGovernanceAction',
-    'Get-MCASIPRange',
+    'Get-MCASIPRangeSet',
     'Get-MCASIPTag',
     'Get-MCASPolicy',
     'Get-MCASPortalSettings',
     'Get-MCASUserGroup',
+    'New-MCASIPRangeSet',
     'Remove-MCASAdminAccess'
     )
 
