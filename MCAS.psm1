@@ -269,6 +269,7 @@ $ExportedCommands = @(
     'New-MCASDiscoveryDataSource',
     'New-MCASSubnetCollection',
     'Remove-MCASAdminAccess',
+    'Remove-MCASDiscoveryDataSource',
     'Remove-MCASSubnetCollection'
     )
 
