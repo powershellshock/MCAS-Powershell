@@ -264,7 +264,7 @@ $ExportedCommands = @(
     'Get-MCASUserGroup',
     'New-MCASSubnetCollection',
     'Remove-MCASAdminAccess',
-    'Remove-MCASSubnetCollection,'
+    'Remove-MCASSubnetCollection'
     )
 
     $ExportedCommands | ForEach-Object {
