@@ -44,24 +44,12 @@ function Remove-MCASSubnetCollection
         }
 
         try {
-            #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/subnet/$SubnetId/" -Token $Token -Method Delete 
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/subnet/$SubnetId/" -Method Delete 
         }
         catch {
             throw "Error calling MCAS API. The exception was: $_"
         }
         
-        Write-Verbose "Checking response for success" 
-        if ($response.StatusCode -eq '200') {
-            $Success = $true
-            Write-Verbose "Successfully deleted subnet $Name" 
-        }
-        else {
-            $Success = $false
-            Write-Verbose "Something went wrong attempting to delete subnet $Name" 
-            Write-Error "Something went wrong attempting to delete subnet $Name"
-        }
-
         if (!$Quiet) {
             $Success
         }      
