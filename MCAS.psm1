@@ -257,6 +257,7 @@ $ExportedCommands = @(
     'Get-MCASConfiguration',
     'Get-MCASCredential',
     'Get-MCASDiscoveredApp',
+    'Get-MCASDiscoveryDataSource',
     'Get-MCASDiscoverySampleLog',
     'Get-MCASGovernanceAction',
     'Get-MCASSubnetCollection',
