@@ -351,7 +351,6 @@ function Get-MCASActivity
 
             # Get the matching items and handle errors
             try {
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/activities/" -Body $body -Method Post -Token $Token -FilterSet $FilterSet
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/activities/" -Body $body -Method Post -FilterSet $filterSet
             }
             catch {

@@ -61,7 +61,6 @@ function Get-MCASBlockScriptContent
     )
 
     try {
-        #$Response = Invoke-MCASRestMethod2 -Uri ("https://$TenantUri/api/discovery_block_scripts/?format="+($DeviceType -as [int])) -Method Get -Token $Token
         $response = Invoke-MCASRestMethod -Credential $Credential -Path ("/api/discovery_block_scripts/?format="+($DeviceType -as [int])) -Method Get
     }
     catch {

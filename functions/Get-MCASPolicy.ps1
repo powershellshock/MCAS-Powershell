@@ -23,7 +23,6 @@ function Get-MCASPolicy
         {
             try {
                 # Fetch the item by its id
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/policies/$Identity/" -Method Get -Token $Token
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/policies/$Identity/" -Method Get
             }
             catch {
@@ -47,7 +46,6 @@ function Get-MCASPolicy
 
             # Get the matching items and handle errors
             try {
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/policies/" -Method Get -Token $Token
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/policies/" -Method Get
             }
             catch {
