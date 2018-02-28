@@ -1,4 +1,4 @@
-function Get-MCASTag
+function Get-MCASIPTag
 {
     [CmdletBinding()]
     Param
@@ -24,7 +24,11 @@ function Get-MCASTag
 
         # Get the matching alerts and handle errors
         try {
-            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/tags/?enabledOnly=true&sort=name&sortDirectory=asc&target=ip" -Method Get
+            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/tags/?enabledOnly=true&sort=name&sortDirectory=asc&target=ip" -Method Get # IP tag
+            #$response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/tags/?enabledOnly=true&sort=name&sortDirectory=asc&target=user" -Method Get # group
+            #$response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/tags/?enabledOnly=true&sort=name&sortDirectory=asc&target=device" -Method Get # device tag
+            #$response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/tags/?enabledOnly=true&sort=name&sortDirectory=asc&target=userAgent" -Method Get # useragent tag
+            
         }
             catch {
                 throw "Error calling MCAS API. The exception was: $_"
