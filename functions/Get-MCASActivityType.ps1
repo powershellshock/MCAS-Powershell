@@ -171,18 +171,18 @@ function Get-MCASActivityType
         try {
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/audits/type/?servicesFilter=eq(i%3A$AppId%2C)&max=500&search=" -Method Get
         }
-            catch {
-                throw "Error calling MCAS API. The exception was: $_"
-            }
+        catch {
+            throw "Error calling MCAS API. The exception was: $_"
+        }
 
         Write-Verbose "Getting just the response property named 'data'"
         $response = $response.data
 
         Write-Verbose "Adding the friendly name of the application to the response as a property named 'app'"
-        $Response = $Response | Add-Member -NotePropertyName 'app' -NotePropertyValue ($AppId -as [mcas_app]) -PassThru
+        $response = $response | Add-Member -NotePropertyName 'app' -NotePropertyValue ($AppId -as [mcas_app]) -PassThru
 
         Write-Verbose "Selecting properties to be returned"
-        $Response = $Response | Select-Object -Property name,app,types,id
+        $response = $response | Select-Object -Property name,app,types,id
 
         $response
     }
