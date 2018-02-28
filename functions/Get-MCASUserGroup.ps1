@@ -56,19 +56,23 @@ function Get-MCASUserGroup {
         'limit'=$ResultSetSize
     }
 
-    # FILTERS
+    # MAYBE ADD FILTERS IN FUTURE
     # "app":{"eq":[11161,20893,26055,15600,26324,20892,28375,11522]}
 
     try {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/user_tags/" -Body $body -Method Post
     }
-        catch {
-            throw "Error calling MCAS API. The exception was: $_"
-        }
-
-    #Test-MCASResultCount
+    catch {
+        throw "Error calling MCAS API. The exception was: $_"
+    }
 
     $response = $response.data
+
+    try {
+        Write-Verbose "Adding alias property to results, if appropriate"
+        $response = $response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
+    }
+    catch {}
 
     $response
 }
