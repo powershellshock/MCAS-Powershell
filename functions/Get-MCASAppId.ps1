@@ -25,7 +25,7 @@ function Get-MCASAppId
         [ValidateNotNullOrEmpty()]
         [mcas_app]$AppName
     )
-    Process
+    process
     {
         $AppName -as [int]
     }
