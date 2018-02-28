@@ -3,15 +3,10 @@ function Set-MCASIPRangeSet
     [CmdletBinding()]
     Param
     (    
-        # Specifies the URL of your CAS tenant, for example 'contoso.portal.cloudappsecurity.com'.
-        [Parameter(Mandatory=$false)]
-        [ValidateScript({($_.EndsWith('.portal.cloudappsecurity.com') -or $_.EndsWith('.adallom.com'))})]
-        [string]$TenantUri,
-
-        # Specifies the CAS credential object containing the 64-character hexadecimal OAuth token used for authentication and authorization to the CAS tenant.
+        # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [System.Management.Automation.PSCredential]$Credential,
+        [System.Management.Automation.PSCredential]$Credential = $CASCredential,
 
         [Parameter(Mandatory=$true, Position=0)]
         [ValidateNotNullOrEmpty()]
@@ -23,12 +18,13 @@ function Set-MCASIPRangeSet
         [ValidateNotNullOrEmpty()]
         [string]$Name,
 
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=1)]
+        [ValidateNotNullOrEmpty()]
+        [ip_category]$Category,
+
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=2)]
         [ValidateNotNullOrEmpty()]
-        [subnet_category]$Category,
-
-        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=3)]
-        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}\/\d{1,2}$|^[a-zA-Z0-9:]{3,39}\/\d{1,3}$')]
         [string[]]$Subnets,
 
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=4)]
@@ -42,16 +38,10 @@ function Set-MCASIPRangeSet
         [Parameter(Mandatory=$false)]
         [Switch]$Quiet
     )
-    Begin {
-        Try {$TenantUri = Select-MCASTenantUri}
-            Catch {Throw $_}
 
-        Try {$Token = Select-MCASToken}
-            Catch {Throw $_}
-    }
-    Process {
+    process {
         # Get the object by its id
-        $item = Get-MCASSubnet -TenantUri $TenantUri | Where-Object {$_._id -eq $Identity}
+        $item = Get-MCASIPRangeSet -Credential $Credential | Where-Object {$_._id -eq $Identity}
 
 
 
@@ -62,31 +52,31 @@ function Set-MCASIPRangeSet
         
         
 
-
+        
 
         # Modify the object properties based on params provided
-        If ($Name){
+        if ($Name) {
             $item.name = $Name
         }
         
-        If ($Category) {
+        if ($Category) {
             $item.category = $Category
         }
 
-        If ($Subnets){
+        if ($Subnets) {
             $item.subnets = $Subnets
         }
 
-        If ($Tags) {
+        if ($Tags) {
             $item.tags = $Tags
         }
 
-        If ($Organization) {
+        if ($Organization) {
             $item.organization = $Organization
         }
 
         # Fixup any properties that need fixing
-        If ($item.tags -eq (@{})) {
+        if ($item.tags -eq (@{})) {
             $item.tags = $null
         }
         #$item.tags = $null
@@ -103,15 +93,17 @@ function Set-MCASIPRangeSet
         
         
         # Convert the object into a hashtable, then a JSON document
-        $Body = @{}
-        $item.psobject.properties | ForEach-Object {$Body.Add($_.Name,$_.Value) }
-        $Body = $Body | ConvertTo-Json -Compress -Depth 3
+        $body = @{}
+        
+        $item.psobject.properties | ForEach-Object {$body.Add($_.Name,$_.Value) }
+        
+        $body = $body | ConvertTo-Json -Compress -Depth 3
 
 
         
 
         Write-Host -ForegroundColor Cyan "Body:"
-        $Body
+        $body
 
 
 
@@ -119,28 +111,29 @@ function Set-MCASIPRangeSet
 
 
 
-        Try {
-            $Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/subnet/$Identity/update_rule/" -Token $Token -Method Post -Body $Body
+        try {
+            #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/subnet/$Identity/update_rule/" -Token $Token -Method Post -Body $body
+            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/subnet/$Identity/update_rule/" -Method Post -Body $body
         }
-            Catch {
-                Throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
-            }
+        catch {
+            throw "Error calling MCAS API. The exception was: $_"
+        }
         
+        <#
         Write-Verbose "Checking response for success" 
-        If ($Response.StatusCode -eq '200') {
+        if ($response.StatusCode -eq '200') {
             Write-Verbose "Successfully modified subnet $NameOrIdTargeted" 
         }
-        Else {
+        else {
             Write-Verbose "Something went wrong attempting to modify subnet $NameOrIdTargeted" 
             Write-Error "Something went wrong attempting to modify subnet $NameOrIdTargeted"
         }  
+        #>
 
-        $Response = $Response.content | ConvertFrom-Json
+        #$response = $response.content | ConvertFrom-Json
 
-        If (!$Quiet) {
-            $Response
+        if (!$Quiet) {
+            $response
         }
-    }
-    End {
     }
 }
