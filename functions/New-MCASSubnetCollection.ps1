@@ -1,4 +1,4 @@
-function New-MCASIPRangeSet
+function New-MCASSubnetCollection
 {
     [CmdletBinding()]
     param
@@ -45,7 +45,6 @@ function New-MCASIPRangeSet
         }
 
         try {
-            #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/subnet/create_rule/" -Token $Token -Method Post -Body $body
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/subnet/create_rule/" -Method Post -Body $body
         }
         catch {

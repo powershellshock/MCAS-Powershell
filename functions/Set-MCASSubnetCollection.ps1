@@ -1,4 +1,4 @@
-function Set-MCASIPRangeSet
+function Set-MCASSubnetCollection
 {
     [CmdletBinding()]
     Param
@@ -41,7 +41,7 @@ function Set-MCASIPRangeSet
 
     process {
         # Get the object by its id
-        $item = Get-MCASIPRangeSet -Credential $Credential | Where-Object {$_._id -eq $Identity}
+        $item = Get-MCASSubnetCollection -Credential $Credential | Where-Object {$_._id -eq $Identity}
 
 
 

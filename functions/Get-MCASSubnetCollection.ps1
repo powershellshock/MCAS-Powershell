@@ -1,4 +1,4 @@
-function Get-MCASIPRangeSet
+function Get-MCASSubnetCollection
 {
     [CmdletBinding()]
     Param
