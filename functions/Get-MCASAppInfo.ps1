@@ -75,9 +75,6 @@ function Get-MCASAppInfo
 
         $response = $response.data
 
-        #$response = $response | ConvertFrom-Json
-
-        #$response = Invoke-MCASResponseHandling -Response $Response -IdentityProperty 'appId'
         try {
             Write-Verbose "Adding alias property to results, if appropriate"
             $response = $response | Add-Member -MemberType AliasProperty -Name Identity -Value 'appId' -PassThru
