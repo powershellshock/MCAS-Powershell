@@ -32,6 +32,7 @@ enum mcas_app {
 
 enum device_type {
     BARRACUDA = 101                     # Barracuda - Web App Firewall (W3C)
+    # BARRACUDA F-SERIES COMING??
     BLUECOAT = 102                      # Blue Coat ProxySG - Access log (W3C)
     CHECKPOINT = 103                    # Check Point (CSV)
     CHECKPOINT_SMART_VIEW_TRACKER = 189 # Check Point - SmartView Tracker

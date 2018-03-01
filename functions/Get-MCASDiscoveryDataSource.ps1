@@ -10,9 +10,7 @@ function Get-MCASDiscoveryDataSource
     )
     
     try {
-        #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/discovery/data_sources/?skip=0&limit=100&sortField=created&sortDirection=desc" -Method Get -Token $Token
-        $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/discovery/data_sources/?skip=0&limit=100&sortField=created&sortDirection=desc" -Method Get
-        
+        $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/discovery/data_sources/?skip=0&limit=100&sortField=created&sortDirection=desc" -Method Get        
     }
     catch {
         throw "Error calling MCAS API. The exception was: $_"
