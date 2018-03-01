@@ -31,7 +31,7 @@
 function Get-MCASAlert
 {
     [CmdletBinding()]
-    Param
+    param
     (
         # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
         [Parameter(Mandatory=$false)]
@@ -41,7 +41,6 @@ function Get-MCASAlert
         # Fetches an alert object by its unique identifier.
         [Parameter(ParameterSetName='Fetch', Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]
         [ValidateNotNullOrEmpty()]
-        #[ValidatePattern({^[A-Fa-f0-9]{24}$})]
         [ValidatePattern({^[A-Fa-f0-9]{24}$})]
         [Alias("_id")]
         [string]$Identity,
@@ -66,7 +65,6 @@ function Get-MCASAlert
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateScript({$_ -gt -1})]
         [int]$Skip = 0,
-
 
 
         ##### FILTER PARAMS #####
@@ -145,12 +143,12 @@ function Get-MCASAlert
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/$Identity/" -Method Get
             }
             catch {
-                throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
+                throw "Error calling MCAS API. The exception was: $_"
             }
             
             try {
                 Write-Verbose "Adding alias property to results, if appropriate"
-                $Response = $Response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
+                $response = $response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
             }
             catch {}
             
@@ -218,9 +216,9 @@ function Get-MCASAlert
             try {
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/" -Body $body -Method Post -FilterSet $filterSet
             }
-                catch {
-                    throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
-                }
+            catch {
+                throw "Error calling MCAS API. The exception was: $_"
+            }
 
             $response = $response.data
 
