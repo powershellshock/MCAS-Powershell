@@ -243,7 +243,7 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 
 
 #----------------------------Exports---------------------------
-# Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the manifest as the 'FunctionsToExport' value
+# Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the module manifest as the 'FunctionsToExport' value
 $ExportedCommands = @(
     'Add-MCASAdminAccess',
     'ConvertFrom-MCASTimestamp',
@@ -261,6 +261,7 @@ $ExportedCommands = @(
     'Get-MCASDiscoveredApp',
     'Get-MCASDiscoveryDataSource',
     'Get-MCASDiscoverySampleLog',
+    'Get-MCASFile',
     'Get-MCASGovernanceAction',
     'Get-MCASSubnetCollection',
     'Get-MCASIPTag',
