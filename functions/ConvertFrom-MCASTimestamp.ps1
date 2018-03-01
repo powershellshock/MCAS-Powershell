@@ -1,5 +1,6 @@
 function ConvertFrom-MCASTimestamp {
     [CmdletBinding()]
+    [OutputType([datetime])]
     Param (
         [Parameter(Mandatory=$true, Position=0)]
         $Timestamp
