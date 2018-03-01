@@ -161,9 +161,9 @@ function Get-MCASAccount
             }
             catch {
                 Write-Verbose "One or more property name collisions were detected in the response. An attempt will be made to resolve this by renaming any offending properties."
-                $response.Replace('"Id":','"Id_int":')
+                $response = $response.Replace('"Id":','"Id_int":')
                 try {
-                    $response = $response | ConvertFrom-Json
+                    $response = $response | ConvertFrom-Json # Try the JSON conversion again, now that we hopefully fixed the property collisions
                 }
                 catch {
                     throw $_
@@ -251,9 +251,9 @@ function Get-MCASAccount
             }
             catch {
                 Write-Verbose "One or more property name collisions were detected in the response. An attempt will be made to resolve this by renaming any offending properties."
-                $response.Replace('"Id":','"Id_int":')
+                $response = $response.Replace('"Id":','"Id_int":')
                 try {
-                    $response = $response | ConvertFrom-Json
+                    $response = $response | ConvertFrom-Json # Try the JSON conversion again, now that we hopefully fixed the property collisions
                 }
                 catch {
                     throw $_
