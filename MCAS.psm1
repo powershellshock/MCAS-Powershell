@@ -276,6 +276,7 @@ $ExportedCommands = @(
     'Remove-MCASAdminAccess',
     'Remove-MCASDiscoveryDataSource',
     'Remove-MCASSubnetCollection',
+    'Send-MCASDiscoveryLog',
     'Set-MCASAlert'
     )
 
