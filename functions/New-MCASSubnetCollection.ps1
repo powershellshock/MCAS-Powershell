@@ -32,7 +32,6 @@ function New-MCASSubnetCollection
         [Parameter(Mandatory=$false)]
         [Switch]$Quiet
     )
-
     process {
         $body = [ordered]@{'name'=$Name;'category'=($Category -as [int]);'subnets'=$Subnets}
 
