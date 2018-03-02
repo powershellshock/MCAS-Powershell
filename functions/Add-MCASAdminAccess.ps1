@@ -1,5 +1,4 @@
-﻿function Add-MCASAdminAccess
-{
+﻿function Add-MCASAdminAccess {
     [CmdletBinding()]
     param
     (
