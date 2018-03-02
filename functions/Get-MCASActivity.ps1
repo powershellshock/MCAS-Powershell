@@ -30,10 +30,9 @@
 .FUNCTIONALITY
    Get-MCASActivity is intended to function as a query mechanism for obtaining activity information from Cloud App Security.
 #>
-function Get-MCASActivity
-{
+function Get-MCASActivity {
     [CmdletBinding()]
-    Param
+    param
     (
         # Fetches an activity object by its unique identifier.
         [Parameter(ParameterSetName='Fetch', Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]
