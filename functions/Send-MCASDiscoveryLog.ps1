@@ -43,6 +43,9 @@ function Send-MCASDiscoveryLog
         [ValidateNotNullOrEmpty()]
         [string]$DiscoveryDataSource,
 
+        # Specifies that the uploaded log file should be made into a snapshot report, in which case the value provided for -DiscoveryDataSource will become the snapshot report name.
+        [switch]$UploadAsSnapshot,
+
         # Specifies that the uploaded log file should be deleted after the upload operation completes.
         [alias("dts")]
         [switch]$Delete
@@ -50,76 +53,79 @@ function Send-MCASDiscoveryLog
     begin {}
     process
     {
-        # Get just the file name, for when full path is specified
-        try {
+        Write-Verbose "Checking for the file $LogFile"
+        try {            
             $fileName = (Get-Item $LogFile).Name
+            $fileSize = (Get-Item $LogFile).Length
         }
         catch {
             throw "Could not get $LogFile : $_"
         }
 
-        #region GET UPLOAD URL
-        try {
-            # Get an upload URL for the file
-            #$getUploadUrlResponse = Invoke-RestMethod -Uri "https://$TenantUri/api/v1/discovery/upload_url/?filename=$fileName&source=$LogType" -Headers @{Authorization = "Token $Token"} -Method Get -UseBasicParsing
+
+        Write-Verbose "Requesting a target URL to which $LogFile can be uploaded"
+        try {            
             $getUploadUrlResponse = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/discovery/upload_url/?filename=$fileName&source=$LogType" -Method Get
 
-            $uploadUrl = $getUploadUrlResponse.url
+            $uploadUrl = $getUploadUrlResponse.url            
         }
         catch {
-            throw "Error calling MCAS API. The exception was: $_"
+            throw "Something went wrong trying to get the target URL for $LogFile. The exception was: $_"
         }
+        Write-Verbose "The target URL to which $LogFile will be uploaded is $uploadUrl"
         
-        #endregion GET UPLOAD URL
 
-        #region UPLOAD LOG FILE
-
-        # Set appropriate transfer encoding header info based on log file size
-        if (($getUploadUrlResponse.provider -eq 'azure') -and ($LogFileBlob.Length -le 64mb)) {
+        Write-Verbose "Setting the transfer mode based on log file size"
+        if (($getUploadUrlResponse.provider -eq 'azure') -and ($fileSize -le 64mb)) {
             $fileUploadHeader = @{'x-ms-blob-type'='BlockBlob'}
+            Write-Verbose "The file is 64MB or smaller, so the following header and value will be used: x-ms-blob-type: BlockBlob"
         }
-        elseif (($getUploadUrlResponse.provider -eq 'azure') -and ($LogFileBlob.Length -gt 64mb)) {
+        elseif (($getUploadUrlResponse.provider -eq 'azure') -and ($fileSize -gt 64mb)) {
             $fileUploadHeader = @{'Transfer-Encoding'='chunked'}
+            Write-Verbose "The file is larger than 64MB, so the following header and value will be used: Transfer-Encoding: chunked"
         }
 
+
+        Write-Verbose "The file $LogFile will now be uploaded to $uploadUrl"
         try
-        {
-            # Upload the log file to the target URL obtained earlier, using appropriate headers
-            if ($fileUploadHeader) {
-                if (Test-Path $LogFile) {
-                    Invoke-RestMethod -Uri $uploadUrl -InFile $LogFile -Headers $fileUploadHeader -Method Put -UseBasicParsing -ErrorAction Stop
-                }
-            }
-            else {
-                if (Test-Path $LogFile) {
-                    Invoke-RestMethod -Uri $uploadUrl -InFile $LogFile -Method Put -UseBasicParsing -ErrorAction Stop
-                }
-            }
+        {            
+            $fileUploadResponse = Invoke-RestMethod -Uri $uploadUrl -InFile $LogFile -Headers $fileUploadHeader -Method Put -UseBasicParsing
         }
         catch {
             throw "File upload failed. The exception was: $_"
         }
-        #endregion UPLOAD LOG FILE
+        Write-Verbose "The upload of file $LogFile seems to have succeeded"
 
-        #region FINALIZE UPLOAD
+
+        if ($UploadAsSnapshot) {
+            Write-Verbose 'The parameter -UploadAsSnapshot was specified, so the message body will include the "uploadAsSnapshot" parameter'
+            $body = @{'uploadUrl'=$UploadUrl;'inputStreamName'=$DiscoveryDataSource;'uploadAsSnapshot'=$true}
+        }
+        else {
+            Write-Verbose 'The parameter -UploadAsSnapshot was not specified, so the message body will not include the "uploadAsSnapshot" parameter'
+            $body = @{'uploadUrl'=$UploadUrl;'inputStreamName'=$DiscoveryDataSource}
+        }
+
+
+        Write-Verbose "The upload of $LogFile will now be finalized"
         try {
-            # Finalize the upload
-            #$finalizeUploadResponse = Invoke-RestMethod -Uri "https://$TenantUri/api/v1/discovery/done_upload/" -Headers @{Authorization = "Token $Token"} -Body @{'uploadUrl'=$UploadUrl;'inputStreamName'=$DiscoveryDataSource} -Method Post -UseBasicParsing -ErrorAction Stop
-            $finalizeUploadResponse = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/discovery/done_upload/" -Body @{'uploadUrl'=$uploadUrl;'inputStreamName'=$DiscoveryDataSource} -Method Post
+            $finalizeUploadResponse = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/discovery/done_upload/" -Body $body -Method Post
         }
         catch {
-            throw "Error calling MCAS API. The exception was: $_"
+            throw "Something went wrong trying to finalize the upload of $LogFile. The exception was: $_"
         }
-        #endregion FINALIZE UPLOAD
+        Write-Verbose "The finalizing of the upload of $LogFile seems to have succeeded"
 
-        try {
-            # Delete the file
-            if ($Delete) {
+
+        if ($Delete) {
+            Write-Verbose "The -Delete parameter was specified, so $LogFile will now be deleted"
+            try {
                 Remove-Item $LogFile -Force
             }
-        }
-        catch {
-            throw "Could not delete $LogFile : $_"
+            catch {
+                Write-Warning "The file $LogFile could not be deleted. The exception was: $_"
+            }
+            Write-Verbose "The deletion of $LogFile seems to have succeeded"
         }
     }
     end {}
