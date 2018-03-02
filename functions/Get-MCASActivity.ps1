@@ -247,12 +247,11 @@ function Get-MCASActivity
         [ValidateNotNullOrEmpty()]
         [string]$UserAgentNotContains
     )
-    begin {
-    }
+    begin {}
     process
     {
         # Fetch mode should happen once for each item from the pipeline, so it goes in the 'Process' block
-        If ($PSCmdlet.ParameterSetName -eq 'Fetch')
+        if ($PSCmdlet.ParameterSetName -eq 'Fetch')
         {
             try {
                 # Fetch the item by its id
@@ -273,7 +272,7 @@ function Get-MCASActivity
     }
     end
     {
-        If ($PSCmdlet.ParameterSetName -eq  'List') # Only run remainder of this end block if not in fetch mode
+        if ($PSCmdlet.ParameterSetName -eq  'List') # Only run remainder of this end block if not in fetch mode
         {
             # List mode logic only needs to happen once, so it goes in the 'End' block for efficiency
 
@@ -281,13 +280,13 @@ function Get-MCASActivity
 
             #region ----------------------------SORTING----------------------------
 
-            If ($SortBy -xor $SortDirection) {Throw 'Error: When specifying either the -SortBy or the -SortDirection parameters, you must specify both parameters.'}
+            if ($SortBy -xor $SortDirection) {throw 'Error: When specifying either the -SortBy or the -SortDirection parameters, you must specify both parameters.'}
 
             # Add sort direction to request body, if specified
-            If ($SortDirection) {$Body.Add('sortDirection',$SortDirection.TrimEnd('ending').ToLower())}
+            if ($SortDirection) {$Body.Add('sortDirection',$SortDirection.TrimEnd('ending').ToLower())}
 
             # Add sort field to request body, if specified
-            If ($SortBy)
+            if ($SortBy)
             {
                 $body.Add('sortField',$SortBy.ToLower())
             }
@@ -297,55 +296,55 @@ function Get-MCASActivity
             $filterSet = @() # Filter set array
 
             # Additional function for date conversion to unix format.
-            If ($DateBefore) {$DateBefore2 = ([int](Get-Date -Date $DateBefore -UFormat %s)*1000)}
-            If ($DateAfter) {$DateAfter2 = ([int](Get-Date -Date $DateAfter -UFormat %s)*1000)}
+            if ($DateBefore) {$DateBefore2 = ([int](Get-Date -Date $DateBefore -UFormat %s)*1000)}
+            if ($DateAfter) {$DateAfter2 = ([int](Get-Date -Date $DateAfter -UFormat %s)*1000)}
 
             # Additional parameter validations and mutual exclusions
-            If ($AppName    -and ($AppId   -or $AppNameNot -or $AppIdNot)) {Throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
-            If ($AppId      -and ($AppName -or $AppNameNot -or $AppIdNot)) {Throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
-            If ($AppNameNot -and ($AppId   -or $AppName    -or $AppIdNot)) {Throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
-            If ($AppIdNot   -and ($AppId   -or $AppNameNot -or $AppName))  {Throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
-            If (($DateBefore -and $DateAfter) -or ($DateBefore -and $DaysAgo) -or ($DateAfter -and $DaysAgo)){Throw 'Cannot reconcile app parameters. Only use one date parameter.'}
-            If ($Impersonated -and $ImpersonatedNot){Throw 'Cannot reconcile app parameters. Do not combine Impersonated and ImpersonatedNot parameters.'}
+            if ($AppName    -and ($AppId   -or $AppNameNot -or $AppIdNot)) {throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
+            if ($AppId      -and ($AppName -or $AppNameNot -or $AppIdNot)) {throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
+            if ($AppNameNot -and ($AppId   -or $AppName    -or $AppIdNot)) {throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
+            if ($AppIdNot   -and ($AppId   -or $AppNameNot -or $AppName))  {throw 'Cannot reconcile app parameters. Only use one of them at a time.'}
+            if (($DateBefore -and $DateAfter) -or ($DateBefore -and $DaysAgo) -or ($DateAfter -and $DaysAgo)){throw 'Cannot reconcile app parameters. Only use one date parameter.'}
+            if ($Impersonated -and $ImpersonatedNot){throw 'Cannot reconcile app parameters. Do not combine Impersonated and ImpersonatedNot parameters.'}
 
             # Value-mapped filters
-            If ($IpCategory) {$filterSet += @{'ip.category'=@{'eq'=([int[]]($IpCategory | ForEach-Object {$_ -as [int]}))}}}
-            If ($AppName)    {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
-            If ($AppNameNot) {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
-            If ($IPTag)      {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
-            If ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTagNot.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            if ($IpCategory) {$filterSet += @{'ip.category'=@{'eq'=([int[]]($IpCategory | ForEach-Object {$_ -as [int]}))}}}
+            if ($AppName)    {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
+            if ($AppNameNot) {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
+            if ($IPTag)      {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            if ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTagNot.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
 
             # Simple filters
-            If ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}
-            If ($AppId)                {$filterSet += @{'service'=                @{'eq'=$AppId}}}
-            If ($AppIdNot)             {$filterSet += @{'service'=                @{'neq'=$AppIdNot}}}
-            If ($EventTypeName)        {$filterSet += @{'activity.eventType'=    @{'eq'=$EventTypeName}}}
-            If ($EventTypeNameNot)     {$filterSet += @{'activity.eventType'=    @{'neq'=$EventTypeNameNot}}}
-            If ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$ActionTypeName}}}
-            If ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$ActionTypeNameNot}}}
-            If ($CountryCodePresent)   {$filterSet += @{'location.country'=       @{'isset'=$true}}}
-            If ($CountryCodeNotPresent){$filterSet += @{'location.country'=       @{'isnotset'=$true}}}
-            If ($CountryCode)          {$filterSet += @{'location.country'=       @{'eq'=$CountryCode}}}
-            If ($CountryCodeNot)       {$filterSet += @{'location.country'=       @{'neq'=$CountryCodeNot}}}
-            If ($DeviceType)           {$filterSet += @{'device.type'=            @{'eq'=$DeviceType.ToUpper()}}} # CAS API expects upper case here
-            If ($DeviceTypeNot)        {$filterSet += @{'device.type'=            @{'neq'=$DeviceTypeNot.ToUpper()}}} # CAS API expects upper case here
-            If ($UserAgentContains)    {$filterSet += @{'userAgent.userAgent'=    @{'contains'=$UserAgentContains}}}
-            If ($UserAgentNotContains) {$filterSet += @{'userAgent.userAgent'=    @{'ncontains'=$UserAgentNotContains}}}
-            If ($IpStartsWith)         {$filterSet += @{'ip.address'=             @{'startswith'=$IpStartsWith}}}
-            If ($IpDoesNotStartWith)   {$filterSet += @{'ip.address'=             @{'doesnotstartwith'=$IpDoesNotStartWith}}}
-            If ($Text)                 {$filterSet += @{'text'=                   @{'text'=$Text}}}
-            If ($DaysAgo)              {$filterSet += @{'date'=                   @{'gte_ndays'=$DaysAgo}}}
-            If ($Impersonated)         {$filterSet += @{'activity.impersonated' = @{'eq'=$true}}}
-            If ($ImpersonatedNot)      {$filterSet += @{'activity.impersonated' = @{'eq'=$false}}}
-            If ($FileID)               {$filterSet += @{'fileSelector'=           @{'eq'=$FileID}}}
-            If ($FileLabel)            {$filterSet += @{'fileLabels'=             @{'eq'=$FileLabel}}}
-            If ($PolicyId)             {$filterSet += @{'policy'=                 @{'eq'=$PolicyId}}}
-            If ($DateBefore -and (-not $DateAfter)) {$filterSet += @{'date'= @{'lte'=$DateBefore2}}}
-            If ($DateAfter -and (-not $DateBefore)) {$filterSet += @{'date'= @{'gte'=$DateAfter2}}}
+            if ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}
+            if ($AppId)                {$filterSet += @{'service'=                @{'eq'=$AppId}}}
+            if ($AppIdNot)             {$filterSet += @{'service'=                @{'neq'=$AppIdNot}}}
+            if ($EventTypeName)        {$filterSet += @{'activity.eventType'=    @{'eq'=$EventTypeName}}}
+            if ($EventTypeNameNot)     {$filterSet += @{'activity.eventType'=    @{'neq'=$EventTypeNameNot}}}
+            if ($ActionTypeName)       {$filterSet += @{'activity.actionType'=    @{'eq'=$ActionTypeName}}}
+            if ($ActionTypeNameNot)    {$filterSet += @{'activity.actionType'=    @{'neq'=$ActionTypeNameNot}}}
+            if ($CountryCodePresent)   {$filterSet += @{'location.country'=       @{'isset'=$true}}}
+            if ($CountryCodeNotPresent){$filterSet += @{'location.country'=       @{'isnotset'=$true}}}
+            if ($CountryCode)          {$filterSet += @{'location.country'=       @{'eq'=$CountryCode}}}
+            if ($CountryCodeNot)       {$filterSet += @{'location.country'=       @{'neq'=$CountryCodeNot}}}
+            if ($DeviceType)           {$filterSet += @{'device.type'=            @{'eq'=$DeviceType.ToUpper()}}} # CAS API expects upper case here
+            if ($DeviceTypeNot)        {$filterSet += @{'device.type'=            @{'neq'=$DeviceTypeNot.ToUpper()}}} # CAS API expects upper case here
+            if ($UserAgentContains)    {$filterSet += @{'userAgent.userAgent'=    @{'contains'=$UserAgentContains}}}
+            if ($UserAgentNotContains) {$filterSet += @{'userAgent.userAgent'=    @{'ncontains'=$UserAgentNotContains}}}
+            if ($IpStartsWith)         {$filterSet += @{'ip.address'=             @{'startswith'=$IpStartsWith}}}
+            if ($IpDoesNotStartWith)   {$filterSet += @{'ip.address'=             @{'doesnotstartwith'=$IpDoesNotStartWith}}}
+            if ($Text)                 {$filterSet += @{'text'=                   @{'text'=$Text}}}
+            if ($DaysAgo)              {$filterSet += @{'date'=                   @{'gte_ndays'=$DaysAgo}}}
+            if ($Impersonated)         {$filterSet += @{'activity.impersonated' = @{'eq'=$true}}}
+            if ($ImpersonatedNot)      {$filterSet += @{'activity.impersonated' = @{'eq'=$false}}}
+            if ($FileID)               {$filterSet += @{'fileSelector'=           @{'eq'=$FileID}}}
+            if ($FileLabel)            {$filterSet += @{'fileLabels'=             @{'eq'=$FileLabel}}}
+            if ($PolicyId)             {$filterSet += @{'policy'=                 @{'eq'=$PolicyId}}}
+            if ($DateBefore -and (-not $DateAfter)) {$filterSet += @{'date'= @{'lte'=$DateBefore2}}}
+            if ($DateAfter -and (-not $DateBefore)) {$filterSet += @{'date'= @{'gte'=$DateAfter2}}}
 
             # boolean filters
-            If ($AdminEvents)    {$filterSet += @{'activity.type'= @{'eq'=$true}}}
-            If ($NonAdminEvents) {$filterSet += @{'activity.type'= @{'eq'=$false}}}
+            if ($AdminEvents)    {$filterSet += @{'activity.type'= @{'eq'=$true}}}
+            if ($NonAdminEvents) {$filterSet += @{'activity.type'= @{'eq'=$false}}}
 
             #endregion ----------------------------FILTERING----------------------------
 
