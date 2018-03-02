@@ -28,8 +28,7 @@
 .FUNCTIONALITY
    Get-MCASAlert is intended to function as a query mechanism for obtaining alert information from Cloud App Security.
 #>
-function Get-MCASAlert
-{
+function Get-MCASAlert {
     [CmdletBinding()]
     param
     (

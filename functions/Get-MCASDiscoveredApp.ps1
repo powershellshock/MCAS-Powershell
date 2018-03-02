@@ -29,8 +29,7 @@
     In this example we pull back only discovered apps in the security category and display a table of names and Total traffic which we format to 2 decimal places and divide the totalTrafficBytes property by 1MB to show the traffic in MB.
 
 #>
-function Get-MCASDiscoveredApp
-{
+function Get-MCASDiscoveredApp {
     [CmdletBinding()]
     param
     (

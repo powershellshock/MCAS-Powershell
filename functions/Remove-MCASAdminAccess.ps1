@@ -1,5 +1,4 @@
-﻿function Remove-MCASAdminAccess
-{
+﻿function Remove-MCASAdminAccess {
     [CmdletBinding()]
     param
     (

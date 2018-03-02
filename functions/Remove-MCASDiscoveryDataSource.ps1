@@ -1,5 +1,4 @@
-function Remove-MCASDiscoveryDataSource
-{
+function Remove-MCASDiscoveryDataSource {
     [CmdletBinding()]
     param
     (

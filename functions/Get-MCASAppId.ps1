@@ -13,11 +13,9 @@
 .FUNCTIONALITY
    Get-MCASAppId is intended to return the id of an app when the app name is provided as input.
 #>
-function Get-MCASAppId
-{
+function Get-MCASAppId {
     [CmdletBinding()]
-    [OutputType([int])]
-    Param
+    param
     (
         # Specifies the app for which to retrieve the integer id value.
         [Parameter(Mandatory=$true, ValueFromPipeline=$true, Position=0)]

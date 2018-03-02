@@ -28,8 +28,7 @@
 
     This example retrives the Browser Use report, shows the browser name and user count columns, and sorts by user count descending.
 #>
-function Get-MCASReportContent
-{
+function Get-MCASReportContent {
     [CmdletBinding()]
     param
     (

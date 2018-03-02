@@ -31,8 +31,7 @@
 .FUNCTIONALITY
    Get-MCASFile is intended to function as a query mechanism for obtaining file information from Cloud App Security.
 #>
-function Get-MCASFile
-{
+function Get-MCASFile {
     [CmdletBinding()]
     param
     (

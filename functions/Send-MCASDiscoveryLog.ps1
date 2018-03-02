@@ -16,8 +16,7 @@
 .FUNCTIONALITY
    Uploads a proxy/firewall log file to a Cloud App Security tenant for discovery.
 #>
-function Send-MCASDiscoveryLog
-{
+function Send-MCASDiscoveryLog {
     [CmdletBinding()]
     param
     (

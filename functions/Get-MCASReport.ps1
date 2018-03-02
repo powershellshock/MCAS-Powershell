@@ -1,5 +1,4 @@
-function Get-MCASReport
-{
+function Get-MCASReport {
     [CmdletBinding()]
     param
     (

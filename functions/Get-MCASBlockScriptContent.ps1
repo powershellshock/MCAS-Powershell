@@ -43,10 +43,9 @@
    Get-MCASBlockScriptContent is intended to function as an export mechanism for obtaining block scripts from Cloud App Security.
 
 #>
-function Get-MCASBlockScriptContent
-{
+function Get-MCASBlockScriptContent {
     [CmdletBinding()]
-    Param
+    param
     (
         # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
         [Parameter(Mandatory=$false)]

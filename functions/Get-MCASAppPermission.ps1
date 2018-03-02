@@ -1,5 +1,4 @@
-function Get-MCASAppPermission
-{
+function Get-MCASAppPermission {
     [CmdletBinding()]
     Param
     (
@@ -18,7 +17,6 @@ function Get-MCASAppPermission
         [ValidateScript({$_ -gt -1})]
         [int]$Skip = 0
     )
-
     $body = @{'skip'=$Skip;'limit'=$ResultSetSize} # Request body
 
     try {

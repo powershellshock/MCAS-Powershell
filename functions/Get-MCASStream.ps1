@@ -10,8 +10,7 @@
 
     This example retrives the global stream ID.
 #>
-function Get-MCASStream
-{
+function Get-MCASStream {
     [CmdletBinding()]
     param
     (

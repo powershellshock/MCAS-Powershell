@@ -1,7 +1,6 @@
-function Get-MCASPolicy
-{
+function Get-MCASPolicy {
     [CmdletBinding()]
-    Param
+    param
     (
         # Fetches a policy by its unique identifier.
         [Parameter(Mandatory=$false, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]

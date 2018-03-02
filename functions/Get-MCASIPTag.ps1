@@ -1,7 +1,6 @@
-function Get-MCASIPTag
-{
+function Get-MCASIPTag{
     [CmdletBinding()]
-    Param
+    param
     (
         # Specifies the CAS credential object containing the 64-character hexadecimal OAuth token used for authentication and authorization to the CAS tenant.
         [Parameter(Mandatory=$false)]
@@ -18,7 +17,7 @@ function Get-MCASIPTag
         [ValidateScript({$_ -ge 0})]
         [int]$Skip = 0
     )
-    Process {
+    process {
 
         # Get the matching alerts and handle errors
         try {

@@ -1,5 +1,4 @@
-function Remove-MCASSubnetCollection
-{
+function Remove-MCASSubnetCollection {
     [CmdletBinding()]
     Param
     (

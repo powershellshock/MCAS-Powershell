@@ -1,5 +1,4 @@
-function Get-MCASDiscoveryDataSource
-{
+function Get-MCASDiscoveryDataSource {
     [CmdletBinding()]
     param
     (

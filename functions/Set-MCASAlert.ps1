@@ -25,10 +25,9 @@
 .FUNCTIONALITY
    Set-MCASAlert is intended to function as a mechanism for setting the status of alerts Cloud App Security.
 #>
-function Set-MCASAlert
-{
+function Set-MCASAlert {
     [CmdletBinding()]
-    Param
+    param
     (
         # Fetches an alert object by its unique identifier.
         [Parameter(ParameterSetName='Fetch', Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]

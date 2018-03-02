@@ -1,5 +1,4 @@
-function New-MCASSubnetCollection
-{
+function New-MCASSubnetCollection {
     [CmdletBinding()]
     param
     (

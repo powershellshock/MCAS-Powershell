@@ -46,8 +46,7 @@
 .FUNCTIONALITY
    Get-MCASCredential is intended to import the CAS tenant URL and OAuth Token into a global session variable to allow other CAS cmdlets to authenticate when passing requests.
 #>
-function Get-MCASCredential
-{
+function Get-MCASCredential {
     [CmdletBinding()]
     [OutputType([System.Management.Automation.PSCredential])]
     param

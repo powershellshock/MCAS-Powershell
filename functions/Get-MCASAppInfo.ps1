@@ -24,8 +24,7 @@
 .FUNCTIONALITY
        Get-MCASAppInfo is designed to query the saasdb one service at a time, not in bulk fashion.
 #>
-function Get-MCASAppInfo
-{
+function Get-MCASAppInfo {
     [CmdletBinding()]
     param
     (

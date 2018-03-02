@@ -23,8 +23,7 @@
 .FUNCTIONALITY
 
 #>
-function Get-MCASGovernanceAction
-{
+function Get-MCASGovernanceAction {
     [CmdletBinding()]
     param
     (

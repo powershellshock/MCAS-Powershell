@@ -1,7 +1,6 @@
-function Get-MCASSubnetCollection
-{
+function Get-MCASSubnetCollection {
     [CmdletBinding()]
-    Param
+    param
     (
         # Specifies the CAS credential object containing the 64-character hexadecimal OAuth token used for authentication and authorization to the CAS tenant.
         [Parameter(Mandatory=$false)]
@@ -18,8 +17,7 @@ function Get-MCASSubnetCollection
         [ValidateScript({$_ -gt -1})]
         [int]$Skip = 0
         
-    )
-    
+    )    
     $body = @{'skip'=$Skip;'limit'=$ResultSetSize} # Base request body
 
     try {
