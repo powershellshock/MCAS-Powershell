@@ -54,8 +54,7 @@
 .FUNCTIONALITY
     Get-MCASAccount is intended to function as a query mechanism for obtaining account information from Cloud App Security.
 #>
-function Get-MCASAccount
-{
+function Get-MCASAccount {
     [CmdletBinding()]
     param
     (
