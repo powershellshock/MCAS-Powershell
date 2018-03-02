@@ -138,10 +138,9 @@
 .FUNCTIONALITY
    Get-MCASActivityType is intended to display the activity types that MCAS is aware of and can filter on. Activities that are unknown to MCAS will fall under the 'Unspecified' activity type.
 #>
-function Get-MCASActivityType
-{
+function Get-MCASActivityType {
     [CmdletBinding()]
-    Param
+    param
     (
         # Specifies the CAS credential object containing the 64-character hexadecimal OAuth token used for authentication and authorization to the CAS tenant.
         [Parameter(Mandatory=$false)]
@@ -165,7 +164,7 @@ function Get-MCASActivityType
         [ValidateScript({$_ -ge 0})]
         [int]$Skip = 0
     )
-    Process {
+    process {
 
         # Get the matching alerts and handle errors
         try {
