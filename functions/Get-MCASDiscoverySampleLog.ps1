@@ -42,7 +42,7 @@ function Get-MCASDiscoverySampleLog {
             'BLUECOAT'                      {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
             'CHECKPOINT'                    {$fileName = 'check-point_demo_log.log'}
             'CHECKPOINT_SMART_VIEW_TRACKER' {$fileName = 'check-point-smartview-tracker_demo_log.log'}
-            'CHECKPOINT_XML = 187'          {$fileName = 'check-point-xml_demo_log.log'}   
+            'CHECKPOINT_XML'                {$fileName = 'check-point-xml_demo_log.log'}   
             'CISCO_ASA'                     {$fileName = 'cisco-asa-firewall_demo_log.log'}
             'CISCO_ASA_FIREPOWER'           {$fileName = 'cisco-asa-firepower_demo_log.log'}
             'CISCO_FWSM'                    {$fileName = 'cisco-fwsm_demo_log.log'}
