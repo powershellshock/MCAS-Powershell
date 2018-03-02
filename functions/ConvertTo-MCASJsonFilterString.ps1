@@ -1,17 +1,14 @@
 ﻿function ConvertTo-MCASJsonFilterString {
     [CmdletBinding()]
-    Param (
-        [Parameter(Mandatory=$true)]
-        $FilterSet
-        )
+    param ([Parameter(Mandatory=$true, Position=0)]$FilterSet)
 
-    $Temp = @()
+    $temp = @()
 
-    ForEach ($Filter in $FilterSet) {
-        $Temp += ((($Filter | ConvertTo-Json -Depth 2 -Compress).TrimEnd('}')).TrimStart('{'))
+    ForEach ($filter in $FilterSet) {
+        $temp += ((($filter | ConvertTo-Json -Depth 2 -Compress).TrimEnd('}')).TrimStart('{'))
         }
-    $RawJsonFilter = ('{'+($Temp -join '},')+'}}')
-    Write-Verbose "JSON filter string is $RawJsonFilter"
+    $rawJsonFilter = ('{'+($temp -join '},')+'}}')
+    Write-Verbose "JSON filter string is $rawJsonFilter"
 
-    $RawJsonFilter
+    $rawJsonFilter
 }

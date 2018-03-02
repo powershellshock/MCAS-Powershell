@@ -1,34 +1,12 @@
-
-
-
 <#
 
-GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE
+GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
 
-    - Variables:
-        - Most variables should be lower case for first letter of first word, then uppercase first letter of subsequent words. eg - $myVariableExample
-        - Parameter variables should be upper case for first letter of every word. eg - $MyParameter
-    - Keywords:
-        - Keywords should be all lower case. eg - 'if', 'else', 'do', 'while', 'enum', '[int]', '[string]'
-    - Commands:
-        - Powershell command/cmdlet case should be match the case of how the command is defined and auto-completes. eg - Get-ChildItem
-    - Code blocks:
-        - Curly braces for code blocks should follow:
-            - Open curly braces should be at the end of the line of code that opens the block's context. eg - if ($true) {
-            - Close curly braces should be indented to the same level as the line of code containing the opening curly brace:
-                if ($true) {
-                    # code
-                }
-    - Comments:
-        - Comments should be achieved via Write-Verbose, in most cases, to enable descriptive verbosity during execution
-        - Comments for which Write-Verbose is not appropriate can be done, as needed/appropriate on separate lines or at the end of a line
-    - Checks for $null:
-        - $null must be left of the operator, not to the right. eg - if ($null -eq $myVar)
+    https://github.com/PoshCode/PowerShellPracticeAndStyle
 
+    and
 
-
-    - exceptions to these standards:
-        - Especially if readability is improved by violating these standards in certain bits of code, it is ok
+    https://msdn.microsoft.com/en-us/library/dd878270%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396 
 
 #>
 
@@ -50,58 +28,67 @@ enum mcas_app {
     Okta = 10980
     Salesforce = 11114
     ServiceNow = 14509
-    }
+}
 
 enum device_type {
-    BARRACUDA = 101
-    BLUECOAT = 102
-    CHECKPOINT = 103
-    CISCO_ASA = 104
-    CISCO_ASA_FIREPOWER = 177
-    CISCO_IRONPORT_PROXY = 106
-    CISCO_FWSM = 157
-    CISCO_SCAN_SAFE = 124
-    CLAVISTER = 164
-    FORTIGATE = 108
-    JUNIPER_SRX = 129
-    JUNIPER_SRX_SD = 172
-    JUNIPER_SRX_WELF = 174
-    JUNIPER_SSG = 168
-    MACHINE_ZONE_MERAKI = 153
-    MCAFEE_SWG = 121
-    MICROSOFT_ISA_W3C = 159
-    PALO_ALTO = 112  #PALO_ALTO_SYSLOG not available here
-    SONICWALL_SYSLOG = 160
-    SOPHOS_CYBEROAM = 162
-    SOPHOS_SG = 130
-    SQUID = 114
-    SQUID_NATIVE = 155
-    WEBSENSE_SIEM_CEF = 138
-    WEBSENSE_V7_5 = 135
-    ZSCALER = 120
-    ZSCALER_QRADAR = 170
-    }
+    BARRACUDA = 101                     # Barracuda - Web App Firewall (W3C)
+    # BARRACUDA F-SERIES COMING??
+    BLUECOAT = 102                      # Blue Coat ProxySG - Access log (W3C)
+    CHECKPOINT = 103                    # Check Point (CSV)
+    CHECKPOINT_SMART_VIEW_TRACKER = 189 # Check Point - SmartView Tracker
+    CHECKPOINT_XML = 187                # Check Point (XML)
+    CISCO_ASA = 104                     # Cisco ASA Firewall
+    CISCO_ASA_FIREPOWER = 177           # Cisco ASA FirePOWER
+    CISCO_FWSM = 157                    # Cisco FWSM
+    CISCO_IRONPORT_PROXY = 106          # CiscoIronPort WSA
+    CISCO_SCAN_SAFE = 124               # Cisco ScanSafe
+    CLAVISTER = 164                     # Clavister NGFW (Syslog)
+    FORTIGATE = 108                     # Fortinet Fortigate
+    GENERIC_CEF = 179                   # Generic CEF log
+    GENERIC_LEEF = 181                  # Generic LEEF log
+    GENERIC_W3C = 183                   # Generic W3C log
+    I_FILTER = 185                      # Digital Arts i-FILTER
+    JUNIPER_SRX = 129                   # Juniper SRX
+    JUNIPER_SRX_SD = 172                # Juniper SRX SD
+    JUNIPER_SRX_WELF = 174              # Juniper SRX Welf
+    JUNIPER_SSG = 168                   # Juniper SSG
+    MACHINE_ZONE_MERAKI = 153           # Meraki - URLs log
+    MCAFEE_SWG = 121                    # McAfee Web Gateway
+    MICROSOFT_ISA_W3C = 159             # Microsoft Forefront Threat Management Gateway (W3C)
+    PALO_ALTO = 112                     # PA Series Firewall 
+    # PALO_ALTO_SYSLOG not available here
+    SONICWALL_SYSLOG = 160              # (Dell) SonicWALL
+    SOPHOS_CYBEROAM = 162               # Sophos Cyberoam Web Filter and Firewall log
+    SOPHOS_SG = 130                     # Sophos SG
+    SQUID = 114                         # Squid (Common)
+    SQUID_NATIVE = 155                  # Squid (Native)
+    WEBSENSE_SIEM_CEF = 138             # (WebSense) Web Security solutions - Internet Activity log (CEF)
+    WEBSENSE_V7_5 = 135                 # (WebSense) Web Security solutions - Investigative detail report (CSV)
+    ZSCALER = 120                       # Zscaler - Default CSV
+    ZSCALER_QRADAR = 170                # Zscaler - QRadar LEEF
+}
 
 enum ip_category {
     None = 0
-    Internal = 1
+    Corporate = 1
     Administrative = 2
     Risky = 3
     VPN = 4
     Cloud_Provider = 5
-    }
+    Other = 6
+}
 
 enum severity_level {
     High = 2
     Medium = 1
     Low = 0
-    }
+}
 
 enum resolution_status {
     Resolved = 2
     Dismissed = 1
     Open = 0
-    }
+}
 
 enum file_type {
     Other = 0
@@ -111,7 +98,7 @@ enum file_type {
     Text = 4
     Image = 5
     Folder = 6
-    }
+}
 
 enum file_access_level {
     Private = 0
@@ -119,16 +106,7 @@ enum file_access_level {
     External = 2
     Public = 3
     PublicInternet = 4
-    }
-
-enum subnet_category {
-    Corporate = 1
-    Administrative = 2
-    Risky = 3
-    VPN = 4
-    CloudProvider = 5
-    Other = 6
-    }
+}
 
 enum app_category {
     ACCOUNTING_AND_FINANCE
@@ -169,65 +147,81 @@ enum app_category {
     WEB_ANALYTICS
     WEBMAIL
     WEBSITE_MONITORING
-    }
+}
 
 enum permission_type {
     READ_ONLY
     FULL_ACCESS
-    }
+}
 
 
 #----------------------------Hash Tables---------------------------
-$IPTagsList = @{
-    Anonymous_Proxy = '000000030000000000000000'
-    Botnet = '0000000c0000000000000000'
-    Darknet_Scanning_IP = '0000001f0000000000000000'
-    Exchange_Online = '0000000e0000000000000000'
-    Exchange_Online_Protection = '000000150000000000000000'
-    Malware_CnC_Server = '0000000d0000000000000000'
-    Microsoft_Cloud = '0000001e0000000000000000'
-    Microsoft_Authentication_and_Identity = '000000100000000000000000'
-    Office_365 = '000000170000000000000000'
-    Office_365_Planner = '000000190000000000000000'
-    Office_365_ProPlus = '000000120000000000000000'
-    Office_Online = '000000140000000000000000'
-    Office_Sway = '0000001d0000000000000000'
-    Office_Web_Access_Companion = '0000001a0000000000000000'
-    OneNote = '000000130000000000000000'
-    Remote_Connectivity_Analyzer = '0000001c0000000000000000'
-    Satellite_Provider = '000000040000000000000000'
-    SharePoint_Online = '0000000f0000000000000000'
-    Skype_for_Business_Online = '000000180000000000000000'
-    Smart_Proxy_and_Access_Proxy_Network = '000000050000000000000000'
-    Tor = '2dfa95cd7922d979d66fcff5'
-    Yammer = '0000001b0000000000000000'
-    Zscaler = '000000160000000000000000'
-    }
+$IPTagsList = [ordered]@{
+    Akamai_Technologies                   = '0000002d0000000000000000'
+    Amazon_Web_Services                   = '000000290000000000000000'
+    Anonymous_proxy                       = '000000030000000000000000'
+    Ascenty_Data_Centers                  = '0000002f0000000000000000'
+    Botnet                                = '0000000c0000000000000000'
+    Brute_force_attacker                  = '000000380000000000000000'
+    Cisco_CWS                             = '000000270000000000000000'
+    Cloud_App_Security_network            = '000000050000000000000000'
+    Darknet_scanning_IP                   = '0000001f0000000000000000'
+    Exchange_Online                       = '0000000e0000000000000000'
+    Exchange_Online_Protection            = '000000150000000000000000'
+    Google_Cloud_Platform                 = '000000280000000000000000'
+    Internal_Network_IP                   = '000000310000000000000000'
+    Malware_CnC_server                    = '0000000d0000000000000000'
+    Masergy_Communications                = '0000002e0000000000000000'
+    McAfee_Web_Gateway                    = '0000002c0000000000000000'
+    Microsoft_Azure                       = '0000002a0000000000000000'
+    Microsoft_Cloud                       = '0000001e0000000000000000'
+    Microsoft_Hosting                     = '0000003a0000000000000000'
+    Microsoft_authentication_and_identity = '000000100000000000000000'
+    Office_365                            = '000000170000000000000000'
+    Office_365_Planner                    = '000000190000000000000000'
+    Office_365_ProPlus                    = '000000120000000000000000'
+    Office_Online                         = '000000140000000000000000'
+    Office_Sway                           = '0000001d0000000000000000'
+    Office_Web_Access_Companion           = '0000001a0000000000000000'
+    OneNote                               = '000000130000000000000000'
+    Remote_Connectivity_Analyzer          = '0000001c0000000000000000'
+    Salesforce_Cloud                      = '000000390000000000000000'
+    Satellite_provider                    = '000000040000000000000000'
+    ScanSafe                              = '000000300000000000000000'
+    SharePoint_Online                     = '0000000f0000000000000000'
+    Skype_for_Business_Online             = '000000180000000000000000'
+    Symantec_Cloud                        = '000000330000000000000000'
+    Tor                                   = '2dfa95cd7922d979d66fcff5'
+    Yammer                                = '0000001b0000000000000000'
+    Zscaler                               = '000000160000000000000000'
+}
 
 $ReportsList = @{
-	'Activity by Location' = 'geolocation_summary'
-	'Browser Use' = 'browser_usage'
-	'IP Addresses' = 'ip_usage'
-	'IP Addresses for Admins' = 'ip_admin_usage'
-	'OS Use' = 'os_usage'
-	'Strictly Remote Users' = 'standalone_users'
-	'Cloud App Overview' = 'app_summary'
-	'Inactive Accounts' = 'zombie_users'
-	'Privileged Users' = 'admins'
-	'Salesforce Special Privileged Accounts' = 'sf_permissions'
-	'User Logon' = 'logins_rate'
-	'Data Sharing Overview' = 'files_summary'
-	'File Extensions' = 'file_extensions'
-	'Orphan Files' = 'orphan_files'
-	'Outbound Sharing by Domain' = 'external_domains'
-	'Owners of Shared Files' = 'shared_files_owners'
-	'Personal User Accounts' = 'personal_users'
-	'Sensitive File Names' = 'file_name_dlp'
+	'Activity by Location'                      = 'geolocation_summary'
+	'Browser Use'                               = 'browser_usage'
+	'IP Addresses'                              = 'ip_usage'
+	'IP Addresses for Admins'                   = 'ip_admin_usage'
+	'OS Use'                                    = 'os_usage'
+	'Strictly Remote Users'                     = 'standalone_users'
+	'Cloud App Overview'                        = 'app_summary'
+	'Inactive Accounts'                         = 'zombie_users'
+	'Privileged Users'                          = 'admins'
+	'Salesforce Special Privileged Accounts'    = 'sf_permissions'
+	'User Logon'                                = 'logins_rate'
+	'Data Sharing Overview'                     = 'files_summary'
+	'File Extensions'                           = 'file_extensions'
+	'Orphan Files'                              = 'orphan_files'
+	'Outbound Sharing by Domain'                = 'external_domains'
+	'Owners of Shared Files'                    = 'shared_files_owners'
+	'Personal User Accounts'                    = 'personal_users'
+	'Sensitive File Names'                      = 'file_name_dlp'
 }
 
 # Create reversed copy of the reports list hash table (keys become values and values become keys)
 $ReportsListReverse = @{}
-$ReportsList.GetEnumerator() | ForEach-Object {$ReportsListReverse.Add($_.Value,$_.Key)}
+$ReportsList.GetEnumerator() | ForEach-Object {
+    $ReportsListReverse.Add($_.Value,$_.Key)
+}
 
 $GovernanceStatus = @{
     'Failed' = $false
@@ -242,16 +236,53 @@ $GovernanceStatus = @{
 # get the path of where the module is saved (if module is at c:\myscripts\module.psm1, then c:\myscripts\)
 $mypath = (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)
 
-#find all the ps1 files in the Functions subfolder
+# find and load all the ps1 files in the Functions subfolder
 Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
     . $_.ProviderPath
 }
 
 
 #----------------------------Exports---------------------------
-# Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the manifest as the 'FunctionsToExport' value
-$ExportedCommands = @('Get-MCASActivityTypes','Get-MCASAppId','Get-MCASDiscoverySampleLogs','Get-MCASUserGroup')
-$ExportedCommands | ForEach-Object {Export-ModuleMember -Function $_}
+# Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the module manifest as the 'FunctionsToExport' value
+$ExportedCommands = @(
+    'Add-MCASAdminAccess',
+    'ConvertFrom-MCASTimestamp',
+    'Get-MCASAccount',
+    'Get-MCASActivity',
+    'Get-MCASActivityType',
+    'Get-MCASAdminAccess',
+    'Get-MCASAlert',
+    'Get-MCASAppId',
+    'Get-MCASAppInfo',
+    'Get-MCASAppPermission',
+    'Get-MCASBlockScriptContent',
+    'Get-MCASConfiguration',
+    'Get-MCASCredential',
+    'Get-MCASDiscoveredApp',
+    'Get-MCASDiscoveryDataSource',
+    'Get-MCASDiscoverySampleLog',
+    'Get-MCASFile',
+    'Get-MCASGovernanceAction',
+    'Get-MCASSubnetCollection',
+    'Get-MCASIPTag',
+    'Get-MCASPolicy',
+    'Get-MCASPortalSettings',
+    'Get-MCASUserGroup',
+    'Get-MCASReport',
+    'Get-MCASReportContent',
+    'Get-MCASStream',
+    'New-MCASDiscoveryDataSource',
+    'New-MCASSubnetCollection',
+    'Remove-MCASAdminAccess',
+    'Remove-MCASDiscoveryDataSource',
+    'Remove-MCASSubnetCollection',
+    'Send-MCASDiscoveryLog',
+    'Set-MCASAlert'
+    )
+
+    $ExportedCommands | ForEach-Object {
+    Export-ModuleMember -Function $_
+}
 
 #Export-ModuleMember -Function Invoke-MCASRestMethod2
 

@@ -1,36 +1,54 @@
 ﻿function Invoke-MCASRestMethod {
     [CmdletBinding()]
-    Param (
+    param (
         # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({
+            ($_.GetNetworkCredential().username).EndsWith('.portal.cloudappsecurity.com')
+        })]
+        [ValidateScript({
+            $_.GetNetworkCredential().Password.ToLower() -match ('^[0-9a-f]{64}$')
+        })]
         [System.Management.Automation.PSCredential]$Credential,
 
+        # Specifies the relative path of the full uri being invoked (e.g. - '/api/v1/alerts/')
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({
+            $_.StartsWith('/')
+        })]
         [string]$Path,
 
+        # Specifies the HTTP method to be used for the request
         [Parameter(Mandatory=$true)]
         [ValidateSet('Get','Post','Put','Delete')]
         [string]$Method,
 
+        # Specifies the body of the request, not including MCAS query filters, which should be specified separately in the -FilterSet parameter
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         $Body,
 
+        # Specifies the content type to be used for the request
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string]$ContentType = 'application/json',
 
+        # Specifies the MCAS query filters to be used, which will be added to the body of the message
         [Parameter(Mandatory=$false)]
         [ValidateNotNull()]
         $FilterSet,
 
-        # Specifies the retry interval, in seconds, if a call to the MCAS web API is throttled. Default = 5
+        # Specifies the retry interval, in seconds, if a call to the MCAS web API is throttled. Default = 5 (seconds)
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        $RetryInterval = 5,
+        [int]$RetryInterval = 5,
 
+        # Specifies that a single item is to be fetched, skipping any processing for lists, such as checking result count totals
+        #[switch]$Fetch, 
+                
+        # Specifies use Invoke-WebRequest instead of Invoke-RestMethod, enabling the caller to get the raw response from the MCAS API without any JSON conversion 
         [switch]$Raw
     )
 
@@ -52,16 +70,18 @@
     Write-Verbose "Method is $Method"
 
     $token = $Credential.GetNetworkCredential().Password.ToLower()
-    Write-Verbose "Token is $token"
+    Write-Verbose "OAuth token is $token"
 
-    $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {"@{$_}"}
+    $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {
+        "@{$_}"
+    }
     Write-Verbose "Request headers are $headers"
 
     # Construct base MCAS call before processing -Body and -FilterSet
-    $mcasCall = '{0} -Uri ''https://{1}{2}'' -Method {3} -Headers {4} -ContentType {5}' -f $cmd, $tenant, $Path, $Method, $headers, $ContentType
+    $mcasCall = '{0} -Uri ''https://{1}{2}'' -Method {3} -Headers {4} -ContentType {5} -UseBasicParsing' -f $cmd, $tenant, $Path, $Method, $headers, $ContentType
 
     if ($Method -eq 'Get') {
-        Write-Verbose "The http method 'Get' does not allow a message body to be sent."
+        Write-Verbose "A request using the Get HTTP method cannot have a message body."
     }
     else {
         $jsonBody = $Body | ConvertTo-Json -Compress -Depth 2
@@ -81,7 +101,8 @@
         $mcasCall = '{0} -Body ''{1}''' -f $mcasCall, $jsonBody
     }
 
-    Write-Verbose "Constructed call to MCAS is '$mcasCall'"
+    Write-Verbose "Constructed call to MCAS is to follow:"
+    Write-Verbose $mcasCall
 
     Write-Verbose "Retry interval if MCAS call is throttled is $RetryInterval seconds"
 
@@ -106,13 +127,36 @@
                     throw $_
                 }
             }
+
+        # Uncomment following two lines if you want to see raw responses in -Verbose output
+        #Write-Verbose 'MCAS response to follow:'
+        #Write-Verbose $response
     }
     while ($retryCall)
 
-    if ($null -ne $response.total) {
-        Write-Verbose ('The total number of matching records was {0}' -f ($response.total))
-        Write-Information $response.total
+    # Provide the total record count in -Verbose output and as InformationVariable, if appropriate
+    if ($response.total) {
+        Write-Verbose 'Checking total matching record count via the response properties...'
+        $recordTotal = $response.total
     }
+    elseif ($response.Content) {
+        try {
+            Write-Verbose 'Checking total matching record count via raw JSON response...'
+            $recordTotal = ($response.Content | ConvertFrom-Json).total   
+        }
+        catch {
+            Write-Verbose 'JSON conversion failed. Checking total matching record count via raw response string extraction...'
+            $recordTotal = ($response.Content.Split(',',3) | Where-Object {$_.StartsWith('"total"')} | Select-Object -First 1).Split(':')[1]
+        } 
+    }
+    else {
+        Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned.'
+    }
+
+    if ($recordTotal -ne $null) {
+        Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
+        Write-Information $recordTotal 
+    }   
 
     $response
 }
