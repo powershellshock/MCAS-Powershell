@@ -1,4 +1,19 @@
-﻿function Remove-MCASAdminAccess {
+﻿<#
+.Synopsis
+   Removes administrators from the MCAS portal. 
+.DESCRIPTION
+   Removce-MCASAdminAccess removes explicit MCAS admin roles from users assigned them within MCAS.
+
+.EXAMPLE
+    C:\>Remove-MCASAdminAccess -Username 'alice@contoso.com'
+
+.EXAMPLE
+    C:\>Remove-MCASAdminAccess 'bob@contoso.com' 
+
+.FUNCTIONALITY
+   Remove-MCASAdminAccess is intended to remove administrators from an MCAS tenant.
+#>
+function Remove-MCASAdminAccess {
     [CmdletBinding()]
     param
     (
@@ -7,7 +22,7 @@
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Credential = $CASCredential,
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
         [ValidateNotNullOrEmpty()]
         [string]$Username
     )
