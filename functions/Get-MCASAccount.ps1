@@ -8,7 +8,7 @@
 
    Get-MCASAccount returns a single custom PS Object or multiple PS Objects with all of the account properties. Methods available are only those available to custom objects by default.
 .EXAMPLE
-   Get-MCASAccount -ResultSetSize 1
+    PS C:\> Get-MCASAccount -ResultSetSize 1
 
     username         : alice@contoso.com
     consolidatedTags : {}
@@ -25,14 +25,14 @@
     This pulls back a single user record and is part of the 'List' parameter set.
 
 .EXAMPLE
-   (Get-MCASAccount -UserDomain contoso.com).count
+    PS C:\> (Get-MCASAccount -UserDomain contoso.com).count
 
     2
 
     This pulls back all accounts from the specified domain and returns a count of the returned objects.
 
 .EXAMPLE
-   Get-MCASAccount -Affiliation External | select @{N='Unique Domains'; E={$_.userDomain}} -Unique
+    PS C:\> Get-MCASAccount -Affiliation External | select @{N='Unique Domains'; E={$_.userDomain}} -Unique
 
     Unique Domains
     --------------
@@ -43,7 +43,7 @@
     This pulls back all accounts flagged as external to the domain and displays only unique records in a new property called 'Unique Domains'.
 
 .EXAMPLE
-   (Get-MCASAccount -ServiceNames 'Microsoft Cloud App Security').serviceData.20595
+    PS C:\> (Get-MCASAccount -ServiceNames 'Microsoft Cloud App Security').serviceData.20595
 
     email                              lastLogin                   lastSeen
     -----                              ---------                   --------
