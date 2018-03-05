@@ -2,7 +2,7 @@
 .Synopsis
    Retrieves MCAS configuration settings. 
 .DESCRIPTION
-   Get-MCASConfiguration lists the general configuration settings or mail configuration settings of the MCAS tenant.
+   Get-MCASConfiguration lists the settings, of the specified type, of the MCAS tenant.
 
 .EXAMPLE
     C:\>Get-MCASConfiguration
@@ -41,11 +41,11 @@
     logoFilePath               :
 
 .EXAMPLE
-    C:\>Get-MCASConfiguration -Settings MailSettings
+    C:\>Get-MCASConfiguration -Settings Mail
 
-    tenantEmail
-    -----------
-    @{fromDisplayName=Contoso}
+    fromDisplayName replyTo from                                 htmlTemplate
+    --------------- ------- ----                                 ------------
+    ContosoSecurity         security@contoso.com
 
 .FUNCTIONALITY
    Get-MCASConfiguration is intended to return the configuration settings of an MCAS tenant.
@@ -58,17 +58,25 @@ function Get-MCASConfiguration {
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Credential = $CASCredential,
 
-        # Specifies whether to retrieve the General setting (default), or the Mail settings (via -Settings MailSettings)
-        [Parameter(Mandatory=$false)]
-        [ValidateSet('GeneralSettings','MailSettings')]
-        [string]$Settings = 'GeneralSettings'
+        # Specifies which setting types to list. Possible Values: 'General'(default),'Mail','ScoreMetrics','SnapshotReports','ContinuousReports','AppTags','UserEnrichment','Anonymization','InfoProtection','ManagedDevices'
+        [Parameter(Mandatory=$false,Position=0)]
+        [ValidateSet('General','Mail','ScoreMetrics','SnapshotReports','ContinuousReports','AppTags','UserEnrichment','Anonymization','InfoProtection','ManagedDevices')]
+        [string]$Settings = 'General'
     )
 
     $returnResponseDataProperty = $false
 
     switch ($Settings) {
-        'GeneralSettings'   {$path = '/cas/api/settings/get/'}
-        'MailSettings'      {$path = '/cas/api/v1/mail_settings/get/'}  
+        'General'           {$path = '/cas/api/v1/settings/'}
+        'Mail'              {$path = '/cas/api/v1/mail_settings/get/';                          $responsePropertyNeeded = 'tenantEmail'}  
+        'ScoreMetrics'      {$path = '/cas/api/v1/discovery/weights/';                          $responsePropertyNeeded = 'fields'}  # Need to map ids to risk factors
+        'SnapshotReports'   {$path = '/cas/api/v1/discovery/snapshot_reports/';                 $responsePropertyNeeded = 'data'}  
+        'ContinuousReports' {$path = '/cas/api/v1/discovery/continuous_reports/';               $responsePropertyNeeded = 'data'} 
+        'AppTags'           {$path = '/cas/api/v1/discovery/app_tags/';                         $responsePropertyNeeded = 'data'} 
+        'UserEnrichment'    {$path = '/cas/api/v1/tenant_config/resolveDiscoveryUserWithAAD/'}
+        'Anonymization'     {$path = '/cas/api/v1/discovery/get_encryption_settings/';          $responsePropertyNeeded = 'data'} 
+        'InfoProtection'    {$path = '/cas/api/v1/settings/'}
+        'ManagedDevices'    {$path = '/cas/api/v1/managed_devices/get_data';                    $responsePropertyNeeded = 'data'}
     }
 
     try {
@@ -78,5 +86,10 @@ function Get-MCASConfiguration {
         throw "Error calling MCAS API. The exception was: $_"
     }
 
-    $response
+    if ($responsePropertyNeeded) {
+        $response.$responsePropertyNeeded
+    }
+    else {
+        $response
+    }
 }
