@@ -1,4 +1,4 @@
-function Set-MCASSubnetCollection {
+function Set-MCASSubnetCollectionAlpha {
     [CmdletBinding()]
     Param
     (    
