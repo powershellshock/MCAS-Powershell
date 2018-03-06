@@ -5,7 +5,7 @@
    Get-MCASConfiguration lists the settings, of the specified type, of the MCAS tenant.
 
 .EXAMPLE
-    C:\>Get-MCASConfiguration
+    PS C:\> Get-MCASConfiguration
 
     environmentName            : Contoso
     omsWorkspaces              :
@@ -41,7 +41,7 @@
     logoFilePath               :
 
 .EXAMPLE
-    C:\>Get-MCASConfiguration -Settings Mail
+    PS C:\> Get-MCASConfiguration -Settings Mail
 
     fromDisplayName replyTo from                                 htmlTemplate
     --------------- ------- ----                                 ------------

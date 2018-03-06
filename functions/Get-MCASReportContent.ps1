@@ -4,7 +4,7 @@
 .DESCRIPTION
     Retrieves report data from the built-in reports.
 .EXAMPLE
-    Get-MCASReportContent -ReportName 'Browser Use' | select @{N='Browser';E={$_.unique_identifier}}, @{N='User Count';E={$_.record_data.users.count}} | sort -Property 'User Count' -Descending
+    PS C:\> Get-MCASReportContent -ReportName 'Browser Use' | select @{N='Browser';E={$_.unique_identifier}}, @{N='User Count';E={$_.record_data.users.count}} | sort -Property 'User Count' -Descending
 
     Browser                               User Count
     -------                               ----------

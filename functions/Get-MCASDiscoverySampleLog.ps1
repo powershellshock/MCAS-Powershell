@@ -5,7 +5,7 @@
    Get-MCASDiscoverySampleLog gets the sample log files that are available for the specified device type.
 
 .EXAMPLE
-   Get-MCASDiscoverySampleLog
+    PS C:\> Get-MCASDiscoverySampleLog
 
     C:\>Get-MCASDiscoverySampleLog -DeviceType CHECKPOINT
 
@@ -16,6 +16,7 @@
    Get-MCASDiscoverySampleLog is intended to download the sample log files that are available for the specified device type. It downloads these as compressed zip files,
    then extracts the text log files from the zip files to a newly created subdirectory of the current. It returns the full path to each sample log it extracts, unless
    the -Quiet switch is specified, in which case it returns nothing.
+   
 #>
 function Get-MCASDiscoverySampleLog {
     [CmdletBinding()]

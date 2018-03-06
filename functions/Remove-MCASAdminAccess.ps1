@@ -5,10 +5,10 @@
    Removce-MCASAdminAccess removes explicit MCAS admin roles from users assigned them within MCAS.
 
 .EXAMPLE
-    C:\>Remove-MCASAdminAccess -Username 'alice@contoso.com'
+    PS C:\> Remove-MCASAdminAccess -Username 'alice@contoso.com'
 
 .EXAMPLE
-    C:\>Remove-MCASAdminAccess 'bob@contoso.com' 
+    PS C:\> Remove-MCASAdminAccess 'bob@contoso.com' 
 
 .FUNCTIONALITY
    Remove-MCASAdminAccess is intended to remove administrators from an MCAS tenant.

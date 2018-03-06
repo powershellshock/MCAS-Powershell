@@ -5,7 +5,7 @@
    Get-MCASPortalSettings gets the portal configuration including policy rules, user groups, and IP address ranges of an MCAS tenant.
 
 .EXAMPLE
-    C:\>Get-MCASPortalSettings
+    PS C:\> Get-MCASPortalSettings
 
     userData                       : @{username=admin@jpoeppelgdpr2.onmicrosoft.com; observer=; tenant_domain=Contoso;
                                     context_id=ec7b180e-3579-411c-8f29-bb092c60d5e0; is_invited_admin=;

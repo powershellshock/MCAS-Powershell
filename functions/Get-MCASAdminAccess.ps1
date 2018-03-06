@@ -5,10 +5,10 @@
    Get-MCASAdminAccess list existing user accounts with MCAS admin rights and the permission type they have within MCAS.
 
 .EXAMPLE
-    C:\>Get-MCASAdminAccess
+    PS C:\> Get-MCASAdminAccess
 
 .EXAMPLE
-    C:\>Get-MCASAdminAccess 'bob@contoso.com' READ_ONLY
+    PS C:\> Get-MCASAdminAccess 'bob@contoso.com' READ_ONLY
     username          permission_type
     --------          ---------------
     alice@contoso.com FULL_ACCESS

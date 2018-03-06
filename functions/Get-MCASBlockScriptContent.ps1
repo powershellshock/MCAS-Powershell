@@ -6,7 +6,7 @@
 
    'Get-MCASBlockScriptContent -DeviceType <device format>' returns the text to be used in a Websense block script. Methods available are only those available to custom objects by default.
 .EXAMPLE
-   Get-MCASBlockScriptContent -DeviceType WEBSENSE
+    PS C:\> Get-MCASBlockScriptContent -DeviceType WEBSENSE
 
     dest_host=lawyerstravel.com action=deny
     dest_host=wellsfargo.com action=deny
@@ -18,10 +18,10 @@
     dest_host=zoovy.com action=deny
     dest_host=cars.com action=deny
 
-   This pulls back string to be used as a block script in Websense format.
+    This pulls back string to be used as a block script in Websense format.
 
 .EXAMPLE
-   Get-MCASBlockScriptContent -DeviceType BLUECOAT_PROXYSG
+    PS C:\> Get-MCASBlockScriptContent -DeviceType BLUECOAT_PROXYSG
 
     url.domain=lawyerstravel.com deny
     url.domain=wellsfargo.com deny
@@ -33,12 +33,12 @@
     url.domain=zoovy.com deny
     url.domain=cars.com deny
 
-   This pulls back string to be used as a block script in BlueCoat format.
+    This pulls back string to be used as a block script in BlueCoat format.
 
 .EXAMPLE
-   Get-MCASBlockScriptContent -DeviceType WEBSENSE | Set-Content MyWebsenseBlockScript.txt -Encoding UTF8
+    PS C:\> Get-MCASBlockScriptContent -DeviceType WEBSENSE | Set-Content MyWebsenseBlockScript.txt -Encoding UTF8
 
-   This pulls back a Websense block script in text string format and creates a new UTF-8 encoded text file out of it.
+    This pulls back a Websense block script in text string format and creates a new UTF-8 encoded text file out of it.
 .FUNCTIONALITY
    Get-MCASBlockScriptContent is intended to function as an export mechanism for obtaining block scripts from Cloud App Security.
 
