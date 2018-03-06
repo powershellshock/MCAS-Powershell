@@ -1,3 +1,36 @@
+<#
+.Synopsis
+   Lists the subnet collections that are defined in MCAS for enrichment of IP address information.
+.DESCRIPTION
+   Get-MCASSubnetCollection gets subnet collections defined in the MCAS tenant.
+
+.EXAMPLE
+    PS C:\> Get-MCASSubnetCollection
+
+    category     : 1
+    subnets      : {@{originalString=10.0.0.0/8; mask=104; address=0000:0000:0000:0000:0000:ffff:0a00:0000}}
+    name         : Contoso Internal IPs
+    tags         : {}
+    location     :
+    _tid         : 26034820
+    organization :
+    _id          : 5a9e053df82b1bb8af51c802
+    Identity     : 5a9e053df82b1bb8af51c802
+
+    category     : 1
+    subnets      : {@{originalString=1.1.1.1/32; mask=128; address=0000:0000:0000:0000:0000:ffff:0101:0101},
+                @{originalString=2.2.2.2/32; mask=128; address=0000:0000:0000:0000:0000:ffff:0202:0202}}
+    name         : Contoso Egress IPs
+    tags         : {}
+    location     :
+    _tid         : 26034820
+    organization :
+    _id          : 5a9e04c7f82b1bb8af51c7fb
+    Identity     : 5a9e04c7f82b1bb8af51c7fb
+
+.FUNCTIONALITY
+   Get-MCASSubnetCollection is intended to return the subnet collections that are defined in MCAS.
+#>
 function Get-MCASSubnetCollection {
     [CmdletBinding()]
     param

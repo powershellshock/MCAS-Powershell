@@ -1,3 +1,19 @@
+<#
+.Synopsis
+   Defines new subnet collections in MCAS for enrichment of IP address information.
+.DESCRIPTION
+   New-MCASSubnetCollection creates subnet collections in the MCAS tenant.
+
+.EXAMPLE
+    PS C:\> New-MCASSubnetCollection -Name 'Contoso Egress IPs' -Category Corporate -Subnets '1.1.1.1/32','2.2.2.2/32'
+    5a9e04c7f82b1bb8af51c7fb
+
+.EXAMPLE
+    PS C:\> New-MCASSubnetCollection -Name 'Contoso Internal IPs' -Category Corporate -Subnets '10.0.0.0/8' -Quiet
+
+.FUNCTIONALITY
+   New-MCASSubnetCollection is intended to return the unique id of the subnet collections that it creates in the MCAS tenant.
+#>
 function New-MCASSubnetCollection {
     [CmdletBinding()]
     param
