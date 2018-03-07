@@ -196,6 +196,13 @@ $IPTagsList = [ordered]@{
     Zscaler                               = '000000160000000000000000'
 }
 
+$UserAgentTagsList = [ordered]@{
+    Native_client             = '000000000000000000000000'
+    Outdated_browser          = '000000010000000000000000'
+    Outdated_operating_system = '000000020000000000000000'
+    Robot                     = '0000002b0000000000000000'
+}
+
 $ReportsList = @{
 	'Activity by Location'                      = 'geolocation_summary'
 	'Browser Use'                               = 'browser_usage'
