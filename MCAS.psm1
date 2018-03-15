@@ -272,6 +272,7 @@ $ExportedCommands = @(
     'Get-MCASFile',
     'Get-MCASGovernanceAction',
     'Get-MCASIPTag',
+    'Get-MCASLogCollector',
     'Get-MCASPolicy',
     'Get-MCASPortalSettings',
     'Get-MCASReport',
