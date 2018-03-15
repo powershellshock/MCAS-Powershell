@@ -255,6 +255,7 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 $ExportedCommands = @(
     'Add-MCASAdminAccess',
     'ConvertFrom-MCASTimestamp',
+    'Export-MCASBlockScript',
     'Get-MCASAccount',
     'Get-MCASActivity',
     'Get-MCASActivityType',
@@ -263,7 +264,6 @@ $ExportedCommands = @(
     'Get-MCASAppId',
     'Get-MCASAppInfo',
     'Get-MCASAppPermission',
-    'Get-MCASBlockScriptContent',
     'Get-MCASConfiguration',
     'Get-MCASCredential',
     'Get-MCASDiscoveredApp',
