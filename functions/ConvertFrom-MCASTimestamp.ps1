@@ -1,6 +1,6 @@
 <#
 .Synopsis
-    Converts an MCAS timestamp (13-digit integer) to a native date/time value of type [datetime].
+    Converts an MCAS timestamp (13-digit integer or 10-digit integer) to a native date/time value of type [datetime].
 .DESCRIPTION
     ConvertFrom-MCASTimestamp returns a System.DateTime value representing the time (localized to the Powershell session's timezone) for a timestamp value from MCAS.
 
@@ -23,9 +23,19 @@ function ConvertFrom-MCASTimestamp {
     [CmdletBinding()]
     [OutputType([datetime])]
     param (
-        [Parameter(Mandatory=$true,Position=0)]
-        [ValidatePattern({^\d{13}$})]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
         $Timestamp
     )
-    (([datetime]'1/1/1970').AddSeconds($Timestamp/1000)).ToLocalTime()
+    process {
+        Write-Verbose $Timestamp.ToString().length
+        if ($Timestamp.ToString().length -eq 13) {
+            (([datetime]'1/1/1970').AddSeconds($Timestamp/1000)).ToLocalTime()
+        }
+        elseif ($Timestamp.ToString().length -eq 10) {
+            (([datetime]'1/1/1970').AddSeconds($Timestamp)).ToLocalTime()
+        }
+        else {
+            throw 'Unexpected value provided for -Timestamp parameter. A 13-digit or 10-digit timestamp was expected.'
+        }
+    }   
 }
