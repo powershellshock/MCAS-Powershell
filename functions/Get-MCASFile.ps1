@@ -8,17 +8,17 @@
 
    Get-MCASFile returns a single custom PS Object or multiple PS Objects with all of the file properties. Methods available are only those available to custom objects by default.
 .EXAMPLE
-   Get-MCASFile -ResultSetSize 1
+    PS C:\> Get-MCASFile -ResultSetSize 1
 
     This pulls back a single file record and is part of the 'List' parameter set.
 
 .EXAMPLE
-   Get-MCASFile -Identity 572caf4588011e452ec18ef0
+    PS C:\> Get-MCASFile -Identity 572caf4588011e452ec18ef0
 
     This pulls back a single file record using the GUID and is part of the 'Fetch' parameter set.
 
 .EXAMPLE
-   Get-MCASFile -AppName Box -Extension pdf -Domains 'microsoft.com' | select name
+    PS C:\> Get-MCASFile -AppName Box -Extension pdf -Domains 'microsoft.com' | select name
 
     name                      dlpScanTime
     ----                      -----------

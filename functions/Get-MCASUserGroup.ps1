@@ -7,7 +7,7 @@
 .EXAMPLE
    Get-MCASUserGroup
 
-    C:\>Get-MCASUserGroup
+    PS C:\> Get-MCASUserGroup
 
     status                     : 0
     lastUpdatedTimestamp       : 1506613547015

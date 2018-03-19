@@ -4,7 +4,7 @@
 .DESCRIPTION
     This function retrives traffic and usage information about discovered apps.
 .EXAMPLE
-    Get-MCASDiscoveredApp -StreamId $streamid | select name -First 5
+    PS C:\> Get-MCASDiscoveredApp -StreamId $streamid | select name -First 5
 
     name
     ----
@@ -15,8 +15,9 @@
     AT&T
 
     Retrieves the first 5 app names sorted alphabetically.
+    
 .EXAMPLE
-    Get-MCASDiscoveredApp -StreamId $streamid -Category SECURITY | select name,@{N='Total (MB)';E={"{0:N2}" -f ($_.trafficTotalBytes/1MB)}}
+    PS C:\> Get-MCASDiscoveredApp -StreamId $streamid -Category SECURITY | select name,@{N='Total (MB)';E={"{0:N2}" -f ($_.trafficTotalBytes/1MB)}}
 
     name                   Total (MB)
     ----                   ----------

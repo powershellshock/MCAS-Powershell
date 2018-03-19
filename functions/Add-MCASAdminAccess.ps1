@@ -1,4 +1,20 @@
-﻿function Add-MCASAdminAccess {
+﻿<#
+.Synopsis
+   Adds administrators to the MCAS portal. 
+.DESCRIPTION
+   Add-MCASAdminAccess grants existing user accounts the MCAS full admin or read-only admin role within MCAS.
+
+.EXAMPLE
+    C:\>Add-MCASAdminAccess -Username 'alice@contoso.com' -PermissionType FULL_ACCESS
+
+.EXAMPLE
+    C:\>Add-MCASAdminAccess 'bob@contoso.com' READ_ONLY
+    WARNING: READ_ONLY acces includes the ability to manage MCAS alerts.
+
+.FUNCTIONALITY
+   Add-MCASAdminAccess is intended to add administrators to an MCAS tenant.
+#>
+function Add-MCASAdminAccess {
     [CmdletBinding()]
     param
     (
@@ -7,7 +23,7 @@
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Credential = $CASCredential,
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
         [ValidateNotNullOrEmpty()]
         [string]$Username,
 
@@ -33,12 +49,11 @@
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path '/cas/api/v1/manage_admin_access/' -Method Post -Body $body
             }
             catch {
-                if ($_ -like 'The remote server returned an error: (400) Bad Request.') {
-                    Write-Error "$Username could not be added as an administrator of Cloud App Security. Check the username and try again."
-                }
-                else {
-                    throw "Error calling MCAS API. The exception was: $_"
-                }
+                throw "Error calling MCAS API. The exception was: $_"
+            }
+
+            if ($PermissionType -eq 'READ_ONLY') {
+                $readOnlyAdded = $true
             }
         }
     }

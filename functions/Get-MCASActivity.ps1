@@ -8,17 +8,17 @@
 
    Get-MCASActivity returns a single custom PS Object or multiple PS Objects with all of the activity properties. Methods available are only those available to custom objects by default.
 .EXAMPLE
-   Get-MCASActivity -ResultSetSize 1
+    PS C:\> Get-MCASActivity -ResultSetSize 1
 
     This pulls back a single activity record and is part of the 'List' parameter set.
 
 .EXAMPLE
-   Get-MCASActivity -Identity 572caf4588011e452ec18ef0
+    PS C:\> Get-MCASActivity -Identity 572caf4588011e452ec18ef0
 
     This pulls back a single activity record using the GUID and is part of the 'Fetch' parameter set.
 
 .EXAMPLE
-   (Get-MCASActivity -AppName Box).rawJson | ?{$_.event_type -match "upload"} | select ip_address -Unique
+    PS C:\> (Get-MCASActivity -AppName Box).rawJson | ?{$_.event_type -match "upload"} | select ip_address -Unique
 
     ip_address
     ----------
@@ -241,10 +241,22 @@ function Get-MCASActivity {
         [ValidateNotNullOrEmpty()]
         [string]$UserAgentContains,
 
-        # Limits the results to those with user agent strings not containing the specified substring..
+        # Limits the results to those with user agent strings not containing the specified substring.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [string]$UserAgentNotContains
+        [string]$UserAgentNotContains,
+
+        # Limits the results to those with user agent tags equal to the specified value(s).
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [validateset('Native_client','Outdated_browser','Outdated_operating_system','Robot')]
+        [string[]]$UserAgentTag,
+
+        # Limits the results to those with user agent tags not equal to the specified value(s).
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [validateset('Native_client','Outdated_browser','Outdated_operating_system','Robot')]
+        [string[]]$UserAgentTagNot
     )
     begin {}
     process
@@ -307,11 +319,13 @@ function Get-MCASActivity {
             if ($Impersonated -and $ImpersonatedNot){throw 'Cannot reconcile app parameters. Do not combine Impersonated and ImpersonatedNot parameters.'}
 
             # Value-mapped filters
-            if ($IpCategory) {$filterSet += @{'ip.category'=@{'eq'=([int[]]($IpCategory | ForEach-Object {$_ -as [int]}))}}}
-            if ($AppName)    {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
-            if ($AppNameNot) {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
-            if ($IPTag)      {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
-            if ($IPTagNot)   {$filterSet += @{'ip.tags'=@{'neq'=($IPTagNot.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            if ($IpCategory)        {$filterSet += @{'ip.category'=@{'eq'=([int[]]($IpCategory | ForEach-Object {$_ -as [int]}))}}}
+            if ($AppName)           {$filterSet += @{'service'=@{'eq'=([int[]]($AppName | ForEach-Object {$_ -as [int]}))}}}
+            if ($AppNameNot)        {$filterSet += @{'service'=@{'neq'=([int[]]($AppNameNot | ForEach-Object {$_ -as [int]}))}}}
+            if ($IPTag)             {$filterSet += @{'ip.tags'=@{'eq'=($IPTag.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            if ($IPTagNot)          {$filterSet += @{'ip.tags'=@{'neq'=($IPTagNot.GetEnumerator() | ForEach-Object {$IPTagsList.$_ -join ','})}}}
+            if ($UserAgentTag)      {$filterSet += @{'userAgent.tags'=@{'eq'=($UserAgentTag.GetEnumerator() | ForEach-Object {$UserAgentTagsList.$_ -join ','})}}}
+            if ($UserAgentTagNot)   {$filterSet += @{'userAgent.tags'=@{'neq'=($UserAgentTagNot.GetEnumerator() | ForEach-Object {$UserAgentTagsList.$_ -join ','})}}}
 
             # Simple filters
             if ($UserName)             {$filterSet += @{'user.username'=          @{'eq'=$UserName}}}

@@ -150,13 +150,12 @@
         } 
     }
     else {
-        Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned.'
+        Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned. Zero will be returned as the matching record count.'
+        $recordTotal = 0 
     }
 
-    if ($recordTotal -ne $null) {
-        Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
-        Write-Information $recordTotal 
-    }   
-
+    Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
+    Write-Information $recordTotal 
+    
     $response
 }

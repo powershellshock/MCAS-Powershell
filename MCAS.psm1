@@ -32,7 +32,8 @@ enum mcas_app {
 
 enum device_type {
     BARRACUDA = 101                     # Barracuda - Web App Firewall (W3C)
-    # BARRACUDA F-SERIES COMING??
+    BARRACUDA_NEXT_GEN_FW = 191         # Barracude - F-Series Firewall
+    BARRACUDA_NEXT_GEN_FW_WEBLOG = 193  # Barracude - F-Series Firewall Web Log Streaming
     BLUECOAT = 102                      # Blue Coat ProxySG - Access log (W3C)
     CHECKPOINT = 103                    # Check Point (CSV)
     CHECKPOINT_SMART_VIEW_TRACKER = 189 # Check Point - SmartView Tracker
@@ -196,6 +197,13 @@ $IPTagsList = [ordered]@{
     Zscaler                               = '000000160000000000000000'
 }
 
+$UserAgentTagsList = [ordered]@{
+    Native_client             = '000000000000000000000000'
+    Outdated_browser          = '000000010000000000000000'
+    Outdated_operating_system = '000000020000000000000000'
+    Robot                     = '0000002b0000000000000000'
+}
+
 $ReportsList = @{
 	'Activity by Location'                      = 'geolocation_summary'
 	'Browser Use'                               = 'browser_usage'
@@ -247,6 +255,7 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 $ExportedCommands = @(
     'Add-MCASAdminAccess',
     'ConvertFrom-MCASTimestamp',
+    'Export-MCASBlockScript',
     'Get-MCASAccount',
     'Get-MCASActivity',
     'Get-MCASActivityType',
@@ -255,7 +264,6 @@ $ExportedCommands = @(
     'Get-MCASAppId',
     'Get-MCASAppInfo',
     'Get-MCASAppPermission',
-    'Get-MCASBlockScriptContent',
     'Get-MCASConfiguration',
     'Get-MCASCredential',
     'Get-MCASDiscoveredApp',
@@ -263,21 +271,23 @@ $ExportedCommands = @(
     'Get-MCASDiscoverySampleLog',
     'Get-MCASFile',
     'Get-MCASGovernanceAction',
-    'Get-MCASSubnetCollection',
     'Get-MCASIPTag',
+    'Get-MCASLogCollector',
     'Get-MCASPolicy',
     'Get-MCASPortalSettings',
-    'Get-MCASUserGroup',
     'Get-MCASReport',
     'Get-MCASReportContent',
     'Get-MCASStream',
+    'Get-MCASSubnetCollection',
+    'Get-MCASUserGroup',
     'New-MCASDiscoveryDataSource',
     'New-MCASSubnetCollection',
     'Remove-MCASAdminAccess',
     'Remove-MCASDiscoveryDataSource',
     'Remove-MCASSubnetCollection',
     'Send-MCASDiscoveryLog',
-    'Set-MCASAlert'
+    'Set-MCASAlert',
+    'Set-MCASSubnetCollectionAlpha'
     )
 
     $ExportedCommands | ForEach-Object {

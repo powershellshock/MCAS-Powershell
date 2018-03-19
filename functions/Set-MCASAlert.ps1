@@ -13,12 +13,12 @@
    An alert identity is always required to be specified either explicity or implicitly from the pipeline.
 
 .EXAMPLE
-   Set-MCASAlert -Identity cac1d0ec5734e596e6d785cc -MarkAs Read
+    PS C:\> Set-MCASAlert -Identity cac1d0ec5734e596e6d785cc -MarkAs Read
 
     This marks a single specified alert as 'Read'.
 
 .EXAMPLE
-   Set-MCASAlert -Identity cac1d0ec5734e596e6d785cc -Dismiss
+    PS C:\> Set-MCASAlert -Identity cac1d0ec5734e596e6d785cc -Dismiss
 
     This will set the status of the specified alert as "Dismissed".
 

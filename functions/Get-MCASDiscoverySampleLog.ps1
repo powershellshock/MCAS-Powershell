@@ -5,7 +5,7 @@
    Get-MCASDiscoverySampleLog gets the sample log files that are available for the specified device type.
 
 .EXAMPLE
-   Get-MCASDiscoverySampleLog
+    PS C:\> Get-MCASDiscoverySampleLog
 
     C:\>Get-MCASDiscoverySampleLog -DeviceType CHECKPOINT
 
@@ -16,6 +16,7 @@
    Get-MCASDiscoverySampleLog is intended to download the sample log files that are available for the specified device type. It downloads these as compressed zip files,
    then extracts the text log files from the zip files to a newly created subdirectory of the current. It returns the full path to each sample log it extracts, unless
    the -Quiet switch is specified, in which case it returns nothing.
+   
 #>
 function Get-MCASDiscoverySampleLog {
     [CmdletBinding()]
@@ -39,6 +40,8 @@ function Get-MCASDiscoverySampleLog {
         Write-Verbose "Device type specified was $DeviceType"
         switch ($DeviceType) {
             'BARRACUDA'                     {$fileName = 'barracuda-web-app-firewall-w3c_demo_log.log'}
+            #'BARRACUDA_F_SERIES'            {$fileName = 'barracuda-f-series-firewall_demo_log.log'}
+            #'BARRACUDA_F_SERIES_STREAMING'  {$fileName = 'barracuda-f-series-firewall-web-log-streaming_demo_log.log'}
             'BLUECOAT'                      {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
             'CHECKPOINT'                    {$fileName = 'check-point_demo_log.log'}
             'CHECKPOINT_SMART_VIEW_TRACKER' {$fileName = 'check-point-smartview-tracker_demo_log.log'}

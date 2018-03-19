@@ -8,17 +8,17 @@
 
    Get-MCASAlert returns a single custom PS Object or multiple PS Objects with all of the alert properties. Methods available are only those available to custom objects by default.
 .EXAMPLE
-   Get-MCASAlert -ResultSetSize 1
+    PS C:\> Get-MCASAlert -ResultSetSize 1
 
     This pulls back a single alert record and is part of the 'List' parameter set.
 
 .EXAMPLE
-   Get-MCASAlert -Identity 572caf4588011e452ec18ef0
+    PS C:\> Get-MCASAlert -Identity 572caf4588011e452ec18ef0
 
     This pulls back a single alert record using the GUID and is part of the 'Fetch' parameter set.
 
 .EXAMPLE
-   (Get-MCASAlert -ResolutionStatus Open -Severity High | where{$_.title -match "system alert"}).descriptionTemplate.parameters.LOGRABBER_SYSTEM_ALERT_MESSAGE_BASE.functionObject.parameters.appName
+    PS C:\> (Get-MCASAlert -ResolutionStatus Open -Severity High | where{$_.title -match "system alert"}).descriptionTemplate.parameters.LOGRABBER_SYSTEM_ALERT_MESSAGE_BASE.functionObject.parameters.appName
 
     ServiceNow
     Box

@@ -13,14 +13,14 @@
    See the examples section for ways to automate setting your CAS credentials for the session.
 
 .EXAMPLE
-   Get-MCASCredential
+    PS C:\> Get-MCASCredential
 
     This prompts the user to enter both their tenant URL as well as their OAuth token.
 
     Username = Tenant URL without https:// (Example: contoso.portal.cloudappsecurity.com)
     Password = Tenant OAuth Token (Example: 432c1750f80d66a1cf2849afb6b10a7fcdf6738f5f554e32c9915fb006bd799a)
 
-    C:\>$CASCredential
+    PS C:\> $CASCredential
 
     To verify your credentials are set in the current session, run the above command.
 
@@ -29,13 +29,13 @@
     contoso.portal.cloudappsecurity.com    System.Security.SecureString
 
 .EXAMPLE
-    Get-MCASCredential -PassThru | Export-CliXml C:\Users\Alice\MyCASCred.credential -Force
+    PS C:\> Get-MCASCredential -PassThru | Export-CliXml C:\Users\Alice\MyCASCred.credential -Force
 
     By specifying the -PassThru switch parameter, this will put the $CASCredential into the pipeline which can be exported to a .credential file that will store the tenant URL and encrypted version of the token in a file.
 
     We can use this newly created .credential file to automate setting our CAS credentials in the session by adding an import command to our profile.
 
-    C:\>notepad $profile
+    PS C:\> notepad $profile
 
     The above command will open our PowerShell profile, which is a set of commands that will run when we start a new session. By default it is empty.
 

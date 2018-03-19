@@ -5,9 +5,7 @@
    Get-MCASAppId gets the unique identifier integer value that represents an app in MCAS.
 
 .EXAMPLE
-   Get-MCASAppId
-
-    C:\>Get-MCASAppId -AppName Microsoft_Cloud_App_Security
+    PS C:\> Get-MCASAppId -AppName Microsoft_Cloud_App_Security
     20595
 
 .FUNCTIONALITY

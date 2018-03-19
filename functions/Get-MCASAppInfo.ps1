@@ -6,14 +6,14 @@
     By passing in an App Id, the user can retrive information about those apps straight from the SaaS DB. This information is returned in an object format that can be formatted for the user's needs.
 
 .EXAMPLE
-    Get-MCASAppInfo -AppId 11114 | select name, category
+    PS C:\> Get-MCASAppInfo -AppId 11114 | select name, category
 
     name       category
     ----       --------
     Salesforce SAASDB_CATEGORY_CRM
 
 .EXAMPLE
-    Get-MCASAppInfo -AppId 18394 | select name, @{N='Compliance';E={"{0:N0}" -f $_.revised_score.compliance}}, @{N='Security';E={"{0:N0}" -f $_.revised_score.security}}, @{N='Provider';E={"{0:N0}" -f $_.revised_score.provider}}, @{N='Total';E={"{0:N0}" -f $_.revised_score.total}} | ft
+    PS C:\> Get-MCASAppInfo -AppId 18394 | select name, @{N='Compliance';E={"{0:N0}" -f $_.revised_score.compliance}}, @{N='Security';E={"{0:N0}" -f $_.revised_score.security}}, @{N='Provider';E={"{0:N0}" -f $_.revised_score.provider}}, @{N='Total';E={"{0:N0}" -f $_.revised_score.total}} | ft
 
     name        Compliance Security Provider Total
     ----        ---------- -------- -------- -----
@@ -22,7 +22,7 @@
     This example creates a table with just the app name and high level scores.
 
 .FUNCTIONALITY
-       Get-MCASAppInfo is designed to query the saasdb one service at a time, not in bulk fashion.
+    Get-MCASAppInfo is designed to query the saasdb one service at a time, not in bulk fashion.
 #>
 function Get-MCASAppInfo {
     [CmdletBinding()]

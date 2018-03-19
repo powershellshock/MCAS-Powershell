@@ -1,3 +1,18 @@
+<#
+.Synopsis
+   Removes a subnet collection in MCAS, as specified by its unique id
+.DESCRIPTION
+   Remove-MCASSubnetCollection deletes subnet collections in the MCAS tenant.
+
+.EXAMPLE
+    PS C:\> Remove-MCASSubnetCollection -Identity '5a9e04c7f82b1bb8af51c7fb'
+
+.EXAMPLE
+    PS C:\> Get-MCASSubnetCollection | Remove-MCASSubnetCollection
+
+.FUNCTIONALITY
+   Remove-MCASSubnetCollection is intended to remove the specified subnet collection from the MCAS tenant.
+#>
 function Remove-MCASSubnetCollection {
     [CmdletBinding()]
     Param

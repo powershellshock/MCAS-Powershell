@@ -4,7 +4,7 @@
 .DESCRIPTION
     The MCAS governance log contains entries for when the product performs an action such as parsing log files or quarantining files. This function retrives those entries.
 .EXAMPLE
-    Get-MCASGovernanceLog -ResultSetSize 10 -Status Successful,Failed -AppName Microsoft_Cloud_App_Security | select taskname, @{N='Status';E={$_.status.isSuccess}}
+    PS C:\> Get-MCASGovernanceLog -ResultSetSize 10 -Status Successful,Failed -AppName Microsoft_Cloud_App_Security | select taskname, @{N='Status';E={$_.status.isSuccess}}
 
     taskName                  Status
     --------                  ------
@@ -19,7 +19,7 @@
     DiscoveryParseLogTask       True
     DiscoveryParseLogTask       True
 
-      This example retrives the last 10 actions for CAS that were both successful and failed and displays their task name and status.
+    This example retrives the last 10 actions for CAS that were both successful and failed and displays their task name and status.
 .FUNCTIONALITY
 
 #>
