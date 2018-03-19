@@ -63,7 +63,6 @@ function Set-MCASAlert {
             $Action = 'dismiss'
             try {
                 # Set the alert's state by its id
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/alerts/$Identity/$Action/" -Token $Token -Method Post
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/$Identity/$Action/" -Method Post
             }
             catch {
@@ -74,7 +73,6 @@ function Set-MCASAlert {
             $Action = $MarkAs.ToLower() # Convert -MarkAs to lower case, as expected by the CAS API
             try {
                 # Set the alert's state by its id
-                #$Response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/alerts/$Identity/$Action/" -Token $Token -Method Post
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/alerts/$Identity/$Action/" -Method Post
             }
             catch {

@@ -216,7 +216,6 @@ function Get-MCASFile {
         {
             try {
                 # Fetch the item by its id
-                #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/files/$Identity/" -Method Get -Token $Token
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/files/$Identity/" -Method Get -Raw         
             }
             catch {
@@ -329,7 +328,6 @@ function Get-MCASFile {
 
             # Get the matching items and handle errors
             try {
-                #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/v1/files/" -Body $body -Method Post -Token $Token -FilterSet $filterSet
                 $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/v1/files/" -Body $body -Method Post -FilterSet $filterSet -Raw
             }
             catch {

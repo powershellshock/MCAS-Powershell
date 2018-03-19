@@ -111,7 +111,6 @@ function Set-MCASSubnetCollectionAlpha {
 
 
         try {
-            #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/cas/api/v1/subnet/$Identity/update_rule/" -Token $Token -Method Post -Body $body
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/v1/subnet/$Identity/update_rule/" -Method Post -Body $body
         }
         catch {

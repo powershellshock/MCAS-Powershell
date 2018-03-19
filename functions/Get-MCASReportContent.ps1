@@ -51,7 +51,6 @@ function Get-MCASReportContent {
         # Get the matching items and handle errors
         try {
             Write-Verbose "Retrieving report $target"
-            #$response = Invoke-MCASRestMethod2 -Uri "https://$TenantUri/api/reports/$target/" -Token $Token -Method Get
             $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/reports/$target/" -Method Get
         }
         catch {
