@@ -33,9 +33,9 @@ function Get-MCASReportContent {
     param
     (
         # Fetches a report by its unique name identifier.
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, Position=0)]
         [ValidateNotNullOrEmpty()]
-        [ValidateSet('Activity by Location','Browser Use','IP Addresses','IP Addresses for Admins','OS Use','Strictly Remote Users','Cloud App Overview','Inactive Accounts','Privileged Users','Salesforce Special Privileged Accounts','User Logon','Data Sharing Overview','File Extensions','Orphan Files','Outbound Sharing by Domain','Owners of Shared Files','Personal User Accounts','Sensitive File Names')]
+        [ValidateSet('Browser Use','Privileged Users','Salesforce Special Privileged Accounts','Data Sharing Overview','Outbound Sharing by Domain')]
         [Alias("FriendlyName")]
         [string]$ReportName,
                 
@@ -51,7 +51,7 @@ function Get-MCASReportContent {
         # Get the matching items and handle errors
         try {
             Write-Verbose "Retrieving report $target"
-            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/api/reports/$target/" -Method Get
+            $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/reports/$target/" -Method Get
         }
         catch {
             throw "Error calling MCAS API. The exception was: $_"
