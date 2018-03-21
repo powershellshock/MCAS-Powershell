@@ -113,8 +113,6 @@ function Get-MCASGovernanceAction {
                 throw $_  #Exception handling is in Invoke-MCASRestMethod, so here we just want to throw it back up the call stack, with no additional logic
             }
             
-            #$response = $response.content | ConvertFrom-Json
-            
             try {
                 Write-Verbose "Adding alias property to results, if appropriate"
                 $Response = $Response | Add-Member -MemberType AliasProperty -Name Identity -Value '_id' -PassThru
