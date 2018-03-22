@@ -96,7 +96,7 @@ function Get-MCASGovernanceAction {
 
         # Limits the results to events listed for the specified IP Tags.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
-        [validateset('Failed','Pending','Successful')]
+        [ValidateSet('Failed','Pending','Successful')]
         [string[]]$Status
     )
     begin {}
