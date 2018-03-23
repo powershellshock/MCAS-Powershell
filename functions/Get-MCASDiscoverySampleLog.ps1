@@ -40,8 +40,8 @@ function Get-MCASDiscoverySampleLog {
         Write-Verbose "Device type specified was $DeviceType"
         switch ($DeviceType) {
             'BARRACUDA'                     {$fileName = 'barracuda-web-app-firewall-w3c_demo_log.log'}
-            #'BARRACUDA_F_SERIES'            {$fileName = 'barracuda-f-series-firewall_demo_log.log'}
-            #'BARRACUDA_F_SERIES_STREAMING'  {$fileName = 'barracuda-f-series-firewall-web-log-streaming_demo_log.log'}
+            'BARRACUDA_NEXT_GEN_FW'         {$fileName = 'barracuda-f-series-firewall_demo_log.log'}
+            'BARRACUDA_NEXT_GEN_FW_WEBLOG'  {$fileName = 'barracuda-f-series-firewall-web-log-streaming_demo_log.log'}
             'BLUECOAT'                      {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
             'CHECKPOINT'                    {$fileName = 'check-point_demo_log.log'}
             'CHECKPOINT_SMART_VIEW_TRACKER' {$fileName = 'check-point-smartview-tracker_demo_log.log'}
