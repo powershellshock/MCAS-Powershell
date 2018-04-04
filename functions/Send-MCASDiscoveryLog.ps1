@@ -98,11 +98,11 @@ function Send-MCASDiscoveryLog {
 
         if ($UploadAsSnapshot) {
             Write-Verbose 'The parameter -UploadAsSnapshot was specified, so the message body will include the "uploadAsSnapshot" parameter'
-            $body = @{'uploadUrl'=$UploadUrl;'inputStreamName'=$DiscoveryDataSource;'uploadAsSnapshot'=$true}
+            $body = @{'uploadUrl'=$uploadUrl;'inputStreamName'=$DiscoveryDataSource;'uploadAsSnapshot'=$true}
         }
         else {
             Write-Verbose 'The parameter -UploadAsSnapshot was not specified, so the message body will not include the "uploadAsSnapshot" parameter'
-            $body = @{'uploadUrl'=$UploadUrl;'inputStreamName'=$DiscoveryDataSource}
+            $body = @{'uploadUrl'=$uploadUrl;'inputStreamName'=$DiscoveryDataSource}
         }
 
 
