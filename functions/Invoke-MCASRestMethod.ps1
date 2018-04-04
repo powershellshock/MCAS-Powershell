@@ -135,27 +135,29 @@
     while ($retryCall)
 
     # Provide the total record count in -Verbose output and as InformationVariable, if appropriate
-    if ($response.total) {
-        Write-Verbose 'Checking total matching record count via the response properties...'
-        $recordTotal = $response.total
-    }
-    elseif ($response.Content) {
-        try {
-            Write-Verbose 'Checking total matching record count via raw JSON response...'
-            $recordTotal = ($response.Content | ConvertFrom-Json).total   
+    if (@('Get','Post') -contains $Method) {
+        if ($response.total) {
+            Write-Verbose 'Checking total matching record count via the response properties...'
+            $recordTotal = $response.total
         }
-        catch {
-            Write-Verbose 'JSON conversion failed. Checking total matching record count via raw response string extraction...'
-            $recordTotal = ($response.Content.Split(',',3) | Where-Object {$_.StartsWith('"total"')} | Select-Object -First 1).Split(':')[1]
-        } 
-    }
-    else {
-        Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned. Zero will be returned as the matching record count.'
-        $recordTotal = 0 
-    }
+        elseif ($response.Content) {
+            try {
+                Write-Verbose 'Checking total matching record count via raw JSON response...'
+                $recordTotal = ($response.Content | ConvertFrom-Json).total   
+            }
+            catch {
+                Write-Verbose 'JSON conversion failed. Checking total matching record count via raw response string extraction...'
+                $recordTotal = ($response.Content.Split(',',3) | Where-Object {$_.StartsWith('"total"')} | Select-Object -First 1).Split(':')[1]
+            } 
+        }
+        else {
+            Write-Verbose 'Could not check total matching record count, perhaps because zero or one records were returned. Zero will be returned as the matching record count.'
+            $recordTotal = 0 
+        }
 
-    Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
-    Write-Information $recordTotal 
+        Write-Verbose ('The total number of matching records was {0}' -f $recordTotal)
+        Write-Information $recordTotal 
+    }
     
     $response
 }

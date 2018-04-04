@@ -40,8 +40,8 @@ function Get-MCASDiscoverySampleLog {
         Write-Verbose "Device type specified was $DeviceType"
         switch ($DeviceType) {
             'BARRACUDA'                     {$fileName = 'barracuda-web-app-firewall-w3c_demo_log.log'}
-            #'BARRACUDA_F_SERIES'            {$fileName = 'barracuda-f-series-firewall_demo_log.log'}
-            #'BARRACUDA_F_SERIES_STREAMING'  {$fileName = 'barracuda-f-series-firewall-web-log-streaming_demo_log.log'}
+            'BARRACUDA_NEXT_GEN_FW'         {$fileName = 'barracuda-f-series-firewall_demo_log.log'}
+            'BARRACUDA_NEXT_GEN_FW_WEBLOG'  {$fileName = 'barracuda-f-series-firewall-web-log-streaming_demo_log.log'}
             'BLUECOAT'                      {$fileName = 'blue-coat-proxysg-access-log-w3c_demo_log.log'}
             'CHECKPOINT'                    {$fileName = 'check-point_demo_log.log'}
             'CHECKPOINT_SMART_VIEW_TRACKER' {$fileName = 'check-point-smartview-tracker_demo_log.log'}
@@ -80,7 +80,7 @@ function Get-MCASDiscoverySampleLog {
         $zipFile = "$fileName.zip"
         Write-Verbose "Zip file to download will is $zipFile"
 
-        $targetFolder = $fileName.Substring(0,($fileName.length-4))
+        $targetFolder = '{0}\{1}' -f $PWD,($fileName.Substring(0,($fileName.length-4)))
         Write-Verbose "Target folder for extracted log files is $targetFolder"
 
         # Download the sample log zip file
@@ -107,7 +107,7 @@ function Get-MCASDiscoverySampleLog {
         # Extract the files from the zip file (some contain more than one log in them)
         try {
             Write-Verbose "Attempting to extract contents of $zipFile to $targetFolder"
-            [io.compression.zipfile]::ExtractToDirectory($zipFile,$targetFolder)
+            [io.compression.zipfile]::ExtractToDirectory("$PWD\$zipFile",$targetFolder)
         }
         catch {
             throw "Could not extract contents of $zipFile : $_"
