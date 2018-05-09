@@ -78,7 +78,7 @@ function Get-MCASCredential {
         }
         
         # Validate the token string format (does not validate the token is valid for authN/authZ)
-        if (!($CASCredential.GetNetworkCredential().Password -match '\b[0-9a-f]{64}\b')) {
+        if (!($CASCredential.GetNetworkCredential().Password -match '^[0-9a-fA-F]{64}|[0-9a-zA-Z]{140}$')) {
             throw "Invalid oauth token specified as the password of the credential. It should be 64 hexadecimal characters."
         }
 

@@ -8,7 +8,7 @@
             ($_.GetNetworkCredential().username).EndsWith('.portal.cloudappsecurity.com')
         })]
         [ValidateScript({
-            $_.GetNetworkCredential().Password.ToLower() -match ('^[0-9a-f]{64}$')
+            $_.GetNetworkCredential().Password -match ('^[0-9a-fA-F]{64}|[0-9a-zA-Z]{140}$')
         })]
         [System.Management.Automation.PSCredential]$Credential,
 
@@ -69,7 +69,7 @@
 
     Write-Verbose "Method is $Method"
 
-    $token = $Credential.GetNetworkCredential().Password.ToLower()
+    $token = $Credential.GetNetworkCredential().Password
     Write-Verbose "OAuth token is $token"
 
     $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {
