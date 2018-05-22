@@ -8,7 +8,7 @@
             ($_.GetNetworkCredential().username).EndsWith('.portal.cloudappsecurity.com')
         })]
         [ValidateScript({
-            $_.GetNetworkCredential().Password -match ('^[0-9a-fA-F]{64}|[0-9a-zA-Z]{140}$')
+            $_.GetNetworkCredential().Password -match ('^[0-9a-zA-Z=]{64,192}$')
         })]
         [System.Management.Automation.PSCredential]$Credential,
 
