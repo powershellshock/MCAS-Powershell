@@ -34,4 +34,3 @@ function New-MCASSiemAgentToken {
         
     $response
 }
-

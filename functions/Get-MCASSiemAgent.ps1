@@ -37,4 +37,3 @@ function Get-MCASSiemAgent {
         
     $response
 }
-
