@@ -18,8 +18,11 @@ function Install-MCASSiemAgent {
         # Specifies whether to install Java silently, when it is automatically installed. If set to 'Off' the user will get an interactive Java setup. Does not applie if -JavaAutoInstall 'Off' is used or if a Java installation is detected.
         [Parameter(Mandatory=$false)]
         [ValidateSet('On','Off')]
-        [string]$InstallJavaSilent = 'Off'
-
+        [string]$InstallJavaSilent = 'Off',
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$JavaExePath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
     )
     
     Write-Verbose 'Checking for 64-bit Windows host'
@@ -68,9 +71,21 @@ function Install-MCASSiemAgent {
     } 
 
     Write-Verbose 'Attempting to detect an existing Java installation on this host.'
-    # Check for java.exe in the path
+    # Check for Java
+    if (Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match '^Java (?:8|9) Update \d{1,3}.*$'}) {
 
-    $javaPath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
+        # Java appears to be installed
+
+        # check if java is in the PATH
+        try {     
+            $JavaExePath = (Get-Item ($JavaExePath = '{0}\java.exe' -f (($env:PATH).split(';') | Where-Object {$_ -match '^.*Java\\.*\\bin$'} | Select -First 1))).FullName
+        }
+        catch {
+
+        }
+        
+    }
+    #$javaPath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
     
     try {
 
