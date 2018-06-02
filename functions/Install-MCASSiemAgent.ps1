@@ -10,7 +10,7 @@ function Install-MCASSiemAgent {
     [CmdletBinding()]
     param
     (
-        # Specifies whether to auto-download and install Java.
+        # Specifies whether to auto-download and install Java, if Java is not found on the machine
         [Parameter(Mandatory=$false)]
         [ValidateSet('On','Off')]
         [string]$JavaAutoInstall = 'Off',
@@ -70,7 +70,7 @@ function Install-MCASSiemAgent {
     Write-Verbose 'Attempting to detect an existing Java installation on this host.'
     # Check for java.exe in the path
 
-
+    $javaPath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
     
     try {
 
@@ -85,19 +85,26 @@ function Install-MCASSiemAgent {
 
     Write-Verbose 'Attempting to download the Java installation package.'
     try {
-        #$javaDownloadUrl = ((Invoke-WebRequest -Uri 'https://www.java.com/en/download/manual.jsp' -UseBasicParsing).links | Where-Object {$_.title -eq 'Download Java software for Windows (64-bit)'} | select -Last 1).href
-        #$javaDownloadResult = Invoke-WebRequest -Uri $javaDownloadUrl -UseBasicParsing -OutFile "$pwd\JavaSetup.tmp"
-        #$javaSetupFileName = (Get-Item "$pwd\JavaSetup.tmp").VersionInfo.OriginalFilename
-        #Rename-Item "$pwd\JavaSetup.tmp" $javaSetupFileName -Force
+        $javaDownloadUrl = ((Invoke-WebRequest -Uri 'https://www.java.com/en/download/manual.jsp' -UseBasicParsing).links | Where-Object {$_.title -eq 'Download Java software for Windows (64-bit)'} | select -Last 1).href
+        $javaDownloadResult = Invoke-WebRequest -Uri $javaDownloadUrl -UseBasicParsing -OutFile "$pwd\JavaSetup.tmp"
+        $javaSetupFileName = (Get-Item "$pwd\JavaSetup.tmp").VersionInfo.OriginalFilename
+        Rename-Item "$pwd\JavaSetup.tmp" $javaSetupFileName -Force
     }
     catch {
         
     }
 
 
-    Write-Verbose 'Attempting to auto-install Java on this host.'
+    Write-Verbose 'Attempting to install Java on this host.'
+    if ($InstallJavaSilent -eq 'On') {
+        Start-Process "$pwd\$javaSetupFileName" -ArgumentList '/s' -Wait
+    }
+    else {
+        Start-Process "$pwd\$javaSetupFileName" -Wait
+    }
+    
     try {
-        Start-Process "$pwd\$javaSetupFileName" -ArgumentList '/s' -Wait -Verbose
+        #Start-Process "$pwd\$javaSetupFileName" -ArgumentList '/s' -Wait
         Remove-Item "$pwd\$javaSetupFileName" -Force
     }
     catch {
