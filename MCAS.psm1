@@ -279,6 +279,7 @@ $ExportedCommands = @(
     'Get-MCASStream',
     'Get-MCASSubnetCollection',
     'Get-MCASUserGroup',
+    'Install-MCASSiemAgent',
     'New-MCASDiscoveryDataSource',
     'New-MCASSiemAgentToken',
     'New-MCASSubnetCollection',
