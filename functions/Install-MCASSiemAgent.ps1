@@ -85,8 +85,12 @@ function Install-MCASSiemAgent {
         }
         
     }
+    
     #$javaPath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
     
+    Invoke-JavaExeFilePicker $InitialDirectory
+
+
     try {
 
     }
