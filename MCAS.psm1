@@ -16,6 +16,7 @@ enum mcas_app {
     Box = 10489
     Dropbox = 11627
     Google_Apps = 11770
+    Microsoft_Azure = 12260
     Microsoft_OneDrive_for_Business = 15600
     Microsoft_Cloud_App_Security = 20595
     Microsoft_Sharepoint_Online = 20892
