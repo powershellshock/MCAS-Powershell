@@ -34,6 +34,7 @@ function Install-MCASSiemAgent {
     catch {
         throw 'Error detecting host information. This command only works on 64-bit Windows hosts.'
     }
+    
     if (-not ($isWindows -and $is64Bit)) {
         throw 'This does not appear to be a 64-bit Windows host. This command only works on 64-bit Windows hosts.'
     }
@@ -70,6 +71,14 @@ function Install-MCASSiemAgent {
         Write-Warning "Something went wrong when attempting to cleanup the MCAS SIEM Agent zip file. The error was: $_"
     } 
 
+    $javaInstallationPath = Get-JavaInstallationPath
+
+
+    if ($javaInstallationPath)
+
+
+<#
+
     Write-Verbose 'Attempting to detect an existing Java installation on this host.'
     # Check for Java
     $javaProduct = Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match '^Java (?:8|9) Update \d{1,3}.*$'}
@@ -82,20 +91,11 @@ function Install-MCASSiemAgent {
 
 
 
-
+        
 
 
         # 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F64180171F0}\InstallLocation = C:\Program Files\Java\jre1.8.0_171\'
         # (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F64180171F0}' -Name 'InstallLocation').InstallLocation
-
-
-
-
-
-
-
-
-
 
 
 
@@ -136,6 +136,7 @@ function Install-MCASSiemAgent {
     }
     else {
         Write-Verbose 'Java does NOT appear to be installed, based on the Add/Remove Programs list'
+        
 
         # Ask if Java has already been downloaded
         $downloadJava = $false
@@ -175,12 +176,12 @@ function Install-MCASSiemAgent {
 
 
     }
-    
+    #>
 
 
     #$javaPath = 'C:\Program Files\Java\jre1.8.0_171\bin\java.exe'
 
-    Get-ChildItem
+    #Get-ChildItem
     
     Invoke-FilePickerDialog -InitialDirectory 'C:\Program Files\Java' -Filter 'Java Runtime Engine|java.exe' -Verbose
 
