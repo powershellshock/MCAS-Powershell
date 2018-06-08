@@ -1,6 +1,7 @@
 function Get-JavaInstallationPath
 {   
     [CmdletBinding()]
+    param()
 
     try {
         Write-Verbose 'Checking installed programs list for an existing Java installation on this host.'    

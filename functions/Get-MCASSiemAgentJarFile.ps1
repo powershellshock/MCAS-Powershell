@@ -1,6 +1,7 @@
 function Get-MCASSiemAgentJarFile
 {
     [CmdletBinding()]
+    param()
 
     Write-Verbose 'Attempting to download the MCAS SIEM Agent zip file from Microsoft Download Center...'
     try {

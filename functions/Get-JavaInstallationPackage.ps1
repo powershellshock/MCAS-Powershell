@@ -1,5 +1,6 @@
 function Get-JavaInstallationPackage {
     [CmdletBinding()]
+    param()
     
     Write-Verbose 'Attempting to download the Java installation package.'
     try {
