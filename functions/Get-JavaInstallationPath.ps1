@@ -8,7 +8,9 @@ function Get-JavaInstallationPath
         
         if ($javaProductGuid) {
             Write-Verbose "Java is installed. Getting the installation location from HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$javaProductGuid"         
-            (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$javaProductGuid" -Name 'InstallLocation').InstallLocation
+            $javaInstallationPath = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$javaProductGuid" -Name 'InstallLocation').InstallLocation
+            Write-Verbose "Java installation path detected is $javaInstallationPath"
+            $javaInstallationPath
         }
         else {
             Write-Verbose "Java was not found in the installed programs list"
