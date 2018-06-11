@@ -48,10 +48,10 @@ function Install-MCASSiemAgent {
 
 
     # Get the installation location of the latest Java engine that is installed, if there is one installed
-    $javaInstallationPath = Get-JavaInstallationPath
+    $javaExePath = Get-JavaExePath
 
 
-    if (-not $javaInstallationPath) {
+    if (-not $javaExePath) {
         if (-not $Force) {
             # Prompt user for confirmation before proceeding with automatic Java download and installation
             if ((Read-Host "CONFIRM: No Java installation was detected. Java will now be automatically downloaded and installed Java. Do you wish to continue?`n[Y] Yes or [N] No").ToLower() -ne 'y') {
@@ -92,11 +92,11 @@ function Install-MCASSiemAgent {
 
 
         # Get the installation location of the newly installed Java engine
-        $javaInstallationPath = Get-JavaInstallationPath
+        $javaExePath = Get-JavaExePath
     }
 
 
-    if (-not $javaInstallationPath) {
+    if (-not $javaExePath) {
         throw "There seems to still be a problem with the Java installation"
     }
 
