@@ -4,7 +4,7 @@
 .DESCRIPTION
     Auto-deploy the MCAS SIEM Agent.
 .EXAMPLE
-    Install-MCASSiemAgent -InteractiveJavaSetup
+    Install-MCASSiemAgent -UseInteractiveJavaSetup
 
     This example will auto-deploy the MCAS SIEM Agent with the user experiencing an interactive Java installation process
 
@@ -18,13 +18,16 @@ function Install-MCASSiemAgent {
     [CmdletBinding()]
     param
     (
+        # Target folder for installation of the SIEM Agent
+        [ValidateNotNullOrEmpty()]
+        [string]$TargetFolder = 'C:\MCAS-SIEM-Agent',
+    
         # Specifies whether to install Java interactively, if/when it is automatically installed. If this is not used, Java setup will be run silently
-        [switch]$InteractiveJavaSetup,
+        [switch]$UseInteractiveJavaSetup,
 
         # Specifies whether to auto-download and silently install Java, if Java is not found on the machine
         [switch]$Force
     )
-    
 
     Write-Verbose 'Checking for 64-bit Windows host'
     try {
@@ -42,6 +45,23 @@ function Install-MCASSiemAgent {
     }
     Write-Verbose 'This host does appear to be running 64-bit Windows. Proceeding'
 
+    # Create target folder for the SIEM Agent, if needed
+    if (-not Test-Path $TargetFolder) {
+        Write-Verbose "Creating $TargetFolder"
+        try {
+            New-Item -ItemType Directory -Path $TargetFolder -Force
+        }
+        catch {
+            throw "An error occurred creating $TargetFolder. The error was $_"
+        }
+    }
+
+
+    # Check for the SIEM Agent JAR file in the target folder
+    if (Test-Path "$TargetFolder\mcas-siemagent-*-signed.jar") {
+        
+    }
+
 
     # Download and extract the latest MCAS SIEM Agent JAR file
     $jarFile = Get-MCASSiemAgentJarFile
@@ -54,7 +74,7 @@ function Install-MCASSiemAgent {
     if (-not $javaExePath) {
         if (-not $Force) {
             # Prompt user for confirmation before proceeding with automatic Java download and installation
-            if ((Read-Host "CONFIRM: No Java installation was detected. Java will now be automatically downloaded and installed Java. Do you wish to continue?`n[Y] Yes or [N] No").ToLower() -ne 'y') {
+            if ((Read-Host 'CONFIRM: No Java installation was detected. Java will now be automatically downloaded and installed Java. Do you wish to continue?`n[Y] Yes or [N] No (default is "No"').ToLower() -ne 'y') {
                 Write-Verbose "User chose not to proceed with automatic Java download and installation. Exiting"
                 return
             }
@@ -66,7 +86,7 @@ function Install-MCASSiemAgent {
 
         # Install Java
         try {
-            if ($InteractiveJavaSetup) {
+            if ($UseInteractiveJavaSetup) {
                 Write-Verbose "Starting interactive Java setup"
                 Start-Process "$pwd\$javaSetupFileName" -Wait
             }
