@@ -18,10 +18,27 @@ function Install-MCASSiemAgent {
     [CmdletBinding()]
     param
     (
+        # Token to be used for this SIEM agent
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({$_  -match $MCAS_TOKEN_VALIDATION_PATTERN})]
+        [string]$Token,
+
+        # Proxy address and port number to be used for this SIEM agent to egress to MCAS cloud service
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ProxyHost,
+
+        # Proxy port number to be used for this SIEM agent to egress to MCAS cloud service (only applies if -ProxyHost is also used, default = 8080)
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateRange(1,65535)]
+        [int]$ProxyPort = 8080,
+                
         # Target folder for installation of the SIEM Agent
         [ValidateNotNullOrEmpty()]
-        [string]$TargetFolder = 'C:\MCAS-SIEM-Agent',
-    
+        [string]$TargetFolder = 'C:\MCAS-SIEM-Agent', 
+        
         # Specifies whether to install Java interactively, if/when it is automatically installed. If this is not used, Java setup will be run silently
         [switch]$UseInteractiveJavaSetup,
 
@@ -29,6 +46,8 @@ function Install-MCASSiemAgent {
         [switch]$Force
     )
 
+    
+    # Check system requirements
     Write-Verbose 'Checking for 64-bit Windows host'
     try {
         $sysInfo = Get-CimInstance Win32_OperatingSystem | Select-Object  Caption,OSArchitecture
@@ -37,40 +56,44 @@ function Install-MCASSiemAgent {
         }
     catch {
         throw 'Error detecting host information. This command only works on 64-bit Windows hosts.'
-    }
-    
-
-    if (-not ($isWindows -and $is64Bit)) {
+    } 
+    if (-not ($isWindows -ne $true -and $is64Bit -ne $true)) {
         throw 'This does not appear to be a 64-bit Windows host. This command only works on 64-bit Windows hosts.'
     }
     Write-Verbose 'This host does appear to be running 64-bit Windows. Proceeding'
 
-    # Create target folder for the SIEM Agent, if needed
-    if (-not Test-Path $TargetFolder) {
-        Write-Verbose "Creating $TargetFolder"
-        try {
-            New-Item -ItemType Directory -Path $TargetFolder -Force
-        }
-        catch {
-            throw "An error occurred creating $TargetFolder. The error was $_"
-        }
-    }
 
-
-    # Check for the SIEM Agent JAR file in the target folder
-    if (Test-Path "$TargetFolder\mcas-siemagent-*-signed.jar") {
+    # Check for the SIEM agent folder and .jar file
+    Write-Verbose "Checking for an existing SIEM Agent JAR file in $TargetFolder"
+    if (-not (Test-Path "$TargetFolder\mcas-siemagent-*-signed.jar")) {
+        Write-Verbose "A JAR file for the MCAS SIEM Agent was not found in $TargetFolder"
         
+        @($TargetFolder, "$TargetFolder\Logs") | ForEach-Object {
+            Write-Verbose "Checking for $_"
+            if (-not (Test-Path $_)) {
+                Write-Verbose "$_ was not found, creating it"
+                try {
+                    New-Item -ItemType Directory -Path $_ -Force
+                }
+                catch {
+                    throw "An error occurred creating $_. The error was $_"
+                }
+            }
+        }
+        
+        Write-Verbose "Downloading and extracting the latest MCAS SIEM Agent JAR file to $pwd"
+        $jarFile = Get-MCASSiemAgentJarFile
+
+        Write-Verbose "Moving the MCAS SIEM Agent JAR file to $TargetFolder"
+        Move-Item -Path "$pwd\$jarFile" -Destination $TargetFolder -Force
     }
-
-
-    # Download and extract the latest MCAS SIEM Agent JAR file
-    $jarFile = Get-MCASSiemAgentJarFile
 
 
     # Get the installation location of the latest Java engine that is installed, if there is one installed
     $javaExePath = Get-JavaExePath
 
 
+    # If Java is not found, download and install it
     if (-not $javaExePath) {
         if (-not $Force) {
             # Prompt user for confirmation before proceeding with automatic Java download and installation
@@ -88,7 +111,7 @@ function Install-MCASSiemAgent {
         try {
             if ($UseInteractiveJavaSetup) {
                 Write-Verbose "Starting interactive Java setup"
-                Start-Process "$pwd\$javaSetupFileName" -Wait
+                Start-Process  "$pwd\$javaSetupFileName" -Wait
             }
             else {
                 Write-Verbose "Starting silent Java setup"
@@ -98,10 +121,8 @@ function Install-MCASSiemAgent {
         catch {
             throw "Something went wrong attempting to run the Java setup package. The error was $_"
         }
-        Write-Verbose "Java setup seems to have finished"
+        Write-Verbose "Java setup seems to have finished"      
         
-        
-        # Clean up Java setup file
         Write-Verbose "Cleaning up the Java setup package"
         try {
             Remove-Item "$pwd\$javaSetupFileName" -Force
@@ -110,24 +131,32 @@ function Install-MCASSiemAgent {
             Write-Warning ('Failed to clean up the Java setup exe file ({0})' -f "$pwd\$javaSetupFileName")
         }
 
-
         # Get the installation location of the newly installed Java engine
         $javaExePath = Get-JavaExePath
     }
 
 
+    # Check again for Java, which should be there now
     if (-not $javaExePath) {
-        throw "There seems to still be a problem with the Java installation"
+        throw "There seems to still be a problem with the Java installation, it could not be found"
+    }
+
+    if ($ProxyHost) {
+        $javaArgs = '-jar {0} --logsDirectory {1} --proxy {2}:{3} --token {4}' -f "$TargetFolder\$jarFile","$TargetFolder\Logs",$ProxyHost,$ProxyPort,$Token
+    }
+    else {
+        $javaArgs = '-jar {0} --logsDirectory {1} --token {2}' -f "$TargetFolder\$jarFile","$TargetFolder\Logs",$Token
     }
 
 
+    $scheduledTask = @{}
+    $scheduledTask.TaskName = 'MCAS SIEM Agent'
+    $scheduledTask.Actions = New-ScheduledTaskAction -Execute $javaExePath -WorkingDirectory $TargetFolder -Argument 
+    $scheduledTask.Triggers = New-ScheduledTaskTrigger -AtStartup
+    $scheduledTask.Principal = New-ScheduledTaskPrincipal -Id Author -LogonType S4U -ProcessTokenSidType Default -UserId SYSTEM
+    $scheduledTask.Settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -DontStopOnIdleEnd
 
-    
-
-    # Get the SIEM Agent's token
-
-
-
+    New-ScheduledTask $scheduledTask
 
 
     Write-Verbose 'Creating an auto-starting scheduled task for the MCAS SIEM Agent on this host.'
@@ -137,7 +166,6 @@ function Install-MCASSiemAgent {
     catch {
         
     }
-
 
 
 
