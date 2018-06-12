@@ -142,7 +142,7 @@ function Install-MCASSiemAgent {
     }
 
     if ($ProxyHost) {
-        $javaArgs = '-jar {0} --logsDirectory {1} --proxy {2}:{3} --token {4}' -f "$TargetFolder\$jarFile","$TargetFolder\Logs",$ProxyHost,$ProxyPort,$Token
+        $javaArgs = '-jar {0} --logsDirectory {1} --token {2} --proxy {3}:{4} ' -f "$TargetFolder\$jarFile","$TargetFolder\Logs",$Token,$ProxyHost,$ProxyPort
     }
     else {
         $javaArgs = '-jar {0} --logsDirectory {1} --token {2}' -f "$TargetFolder\$jarFile","$TargetFolder\Logs",$Token
@@ -151,7 +151,7 @@ function Install-MCASSiemAgent {
 
     $scheduledTask = @{}
     $scheduledTask.TaskName = 'MCAS SIEM Agent'
-    $scheduledTask.Actions = New-ScheduledTaskAction -Execute $javaExePath -WorkingDirectory $TargetFolder -Argument 
+    $scheduledTask.Actions = New-ScheduledTaskAction -Execute $javaExePath -WorkingDirectory $TargetFolder -Argument $javaArgs
     $scheduledTask.Triggers = New-ScheduledTaskTrigger -AtStartup
     $scheduledTask.Principal = New-ScheduledTaskPrincipal -Id Author -LogonType S4U -ProcessTokenSidType Default -UserId SYSTEM
     $scheduledTask.Settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -DontStopOnIdleEnd
