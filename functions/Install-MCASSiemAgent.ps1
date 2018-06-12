@@ -4,27 +4,27 @@
 .DESCRIPTION
     Auto-deploy the MCAS SIEM Agent.
 .EXAMPLE
-    Install-MCASSiemAgent -UseInteractiveJavaSetup
+    Install-MCASSiemAgent -UseInteractiveJavaSetup -Token 'ZV9LS...dGBwb'
 
     This example will auto-deploy the MCAS SIEM Agent with the user experiencing an interactive Java installation process
 
 .EXAMPLE
-    Install-MCASSiemAgent -Force
+    Install-MCASSiemAgent -TargetFolder 'C:\MCAS' -Force -Token 'ZV9LS...dGBwb'
 
-    This example will auto-deploy the MCAS SIEM Agent with no user interaction.
+    This example will auto-deploy the MCAS SIEM Agent in the C:\MCAS folder with no user interaction.
 
 #>
 function Install-MCASSiemAgent {
     [CmdletBinding()]
     param
     (
-        # Token to be used for this SIEM agent
+        # Token to be used by this SIEM agent to communicate with MCAS (provided during SIEM Agent creation in the MCAS console)
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({$_  -match $MCAS_TOKEN_VALIDATION_PATTERN})]
         [string]$Token,
 
-        # Proxy address and port number to be used for this SIEM agent to egress to MCAS cloud service
+        # Proxy address to be used for this SIEM agent for outbound communication to the MCAS service in the cloud
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string]$ProxyHost,
@@ -35,7 +35,7 @@ function Install-MCASSiemAgent {
         [ValidateRange(1,65535)]
         [int]$ProxyPort = 8080,
                 
-        # Target folder for installation of the SIEM Agent
+        # Target folder for installation of the SIEM Agent (default = "C:\MCAS-SIEM-Agent")
         [ValidateNotNullOrEmpty()]
         [string]$TargetFolder = 'C:\MCAS-SIEM-Agent', 
         
@@ -149,26 +149,19 @@ function Install-MCASSiemAgent {
     }
 
 
-    $scheduledTask = @{}
-    $scheduledTask.TaskName = 'MCAS SIEM Agent'
-    $scheduledTask.Actions = New-ScheduledTaskAction -Execute $javaExePath -WorkingDirectory $TargetFolder -Argument $javaArgs
-    $scheduledTask.Triggers = New-ScheduledTaskTrigger -AtStartup
-    $scheduledTask.Principal = New-ScheduledTaskPrincipal -Id Author -LogonType S4U -ProcessTokenSidType Default -UserId SYSTEM
-    $scheduledTask.Settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -DontStopOnIdleEnd
-
-    New-ScheduledTask $scheduledTask
-
-
-    Write-Verbose 'Creating an auto-starting scheduled task for the MCAS SIEM Agent on this host.'
+    # Create a scheduled task to auto-run the MCAS SIEM Agent
+    Write-Verbose 'Creating an MCAS SIEM Agent scheduled task that will automatically run at startup on this host.'
     try {
-
+        $scheduledTask = @{}
+        $scheduledTask.TaskName = 'MCAS SIEM Agent'
+        $scheduledTask.Actions = New-ScheduledTaskAction -Execute $javaExePath -WorkingDirectory $TargetFolder -Argument $javaArgs
+        $scheduledTask.Triggers = New-ScheduledTaskTrigger -AtStartup
+        $scheduledTask.Principal = New-ScheduledTaskPrincipal -Id Author -LogonType S4U -ProcessTokenSidType Default -UserId SYSTEM
+        $scheduledTask.Settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -DontStopOnIdleEnd
+        
+        New-ScheduledTask $scheduledTask
     }
     catch {
-        
+        throw ('Something went wrong when creating the scheduled task named {0}' -f $scheduledTask.TaskName)
     }
-
-
-
-
-
 }
