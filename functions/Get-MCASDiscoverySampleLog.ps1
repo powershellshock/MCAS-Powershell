@@ -75,6 +75,7 @@ function Get-MCASDiscoverySampleLog {
             'WEBSENSE_V7_5'                 {$fileName = 'web-security-solutions-investigative-detail-report-csv_demo_log.log'}
             'ZSCALER'                       {$fileName = 'zscaler-default-csv_demo_log.log'}
             'ZSCALER_QRADAR'                {$fileName = 'zscaler-qradar-leef_demo_log.log'}
+            'ZSCALER_CEF'                   {$fileName = 'zscaler-cef_demo_log.log}
         }
 
         $zipFile = "$fileName.zip"

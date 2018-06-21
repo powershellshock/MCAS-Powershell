@@ -68,6 +68,7 @@ enum device_type {
     WEBSENSE_V7_5 = 135                 # (WebSense) Web Security solutions - Investigative detail report (CSV)
     ZSCALER = 120                       # Zscaler - Default CSV
     ZSCALER_QRADAR = 170                # Zscaler - QRadar LEEF
+    ZSCALER_CEF = 196                   # Zscaler - CEF
 }
 
 enum ip_category {
