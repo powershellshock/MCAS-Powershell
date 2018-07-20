@@ -37,7 +37,7 @@ function Install-MCASSiemAgent {
                 
         # Target folder for installation of the SIEM Agent (default = "C:\MCAS-SIEM-Agent")
         [ValidateNotNullOrEmpty()]
-        [string]$TargetFolder = 'C:\MCAS-SIEM-Agent', 
+        [string]$TargetFolder = 'C:\MCAS-SIEM-Agent',
         
         # Specifies whether to install Java interactively, if/when it is automatically installed. If this is not used, Java setup will be run silently
         [switch]$UseInteractiveJavaSetup,
@@ -46,7 +46,6 @@ function Install-MCASSiemAgent {
         [switch]$Force
     )
 
-    
     # Check system requirements
     Write-Verbose 'Checking for 64-bit Windows host'
     try {
