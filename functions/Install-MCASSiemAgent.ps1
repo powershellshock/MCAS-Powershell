@@ -34,11 +34,11 @@ function Install-MCASSiemAgent {
         [ValidateNotNullOrEmpty()]
         [ValidateRange(1,65535)]
         [int]$ProxyPort = 8080,
-                
+
         # Target folder for installation of the SIEM Agent (default = "C:\MCAS-SIEM-Agent")
         [ValidateNotNullOrEmpty()]
         [string]$TargetFolder = 'C:\MCAS-SIEM-Agent',
-        
+
         # Specifies whether to install Java interactively, if/when it is automatically installed. If this is not used, Java setup will be run silently
         [switch]$UseInteractiveJavaSetup,
 
