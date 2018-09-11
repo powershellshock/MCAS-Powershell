@@ -86,7 +86,13 @@ function Get-MCASDiscoveredApp {
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateSet('7','30','90')]
         [ValidateNotNullOrEmpty()]
-        [int]$TimeFrame=90
+        [int]$TimeFrame=90,
+
+        # Limits the results to apps with the specified tag(s).
+        [Parameter(ParameterSetName='List', Mandatory=$false)]
+        [ValidateSet('Sanctioned','Unsanctioned')]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$Tag
     )
 
     if ($StreamId) {
@@ -96,20 +102,12 @@ function Get-MCASDiscoveredApp {
         $stream = (Get-MCASStream | Where-Object {$_.displayName -eq 'Global View'}).Identity
     } 
 
-    $body = @{
-        'skip'=$Skip;
-        'limit'=$ResultSetSize;
-        'score'=$ScoreRange;
-        'timeframe'=$TimeFrame;
-        'streamId'=$stream
-    } # Base request body
+    $body = @{'skip'=$Skip;'limit'=$ResultSetSize;'streamId'=$stream;'timeframe'=$TimeFrame} # Base request body
 
-    if ($Category) {
-        $body += @{'category'="SAASDB_CATEGORY_$Category"}
-    }
+    #region ----------------------------SORTING----------------------------
 
-    if ($SortBy -xor $SortDirection) {Write-Error 'Error: When specifying either the -SortBy or the -SortDirection parameters, you must specify both parameters.' -ErrorAction Stop}
-
+    if ($SortBy -xor $SortDirection) {throw 'Error: When specifying either the -SortBy or the -SortDirection parameters, you must specify both parameters.'}
+    
     # Add sort direction to request body, if specified
     if ($SortDirection) {$Body.Add('sortDirection',$SortDirection.TrimEnd('ending').ToLower())}
 
@@ -122,6 +120,36 @@ function Get-MCASDiscoveredApp {
         'Upload'       {$body.Add('sortField','trafficUploadedBytes')}
         'Transactions' {$body.Add('sortField','trafficTotalEvents')}
     }
+    if ($SortBy) {$body.Add('sortField',$SortBy)}
+
+    #endregion ----------------------------SORTING----------------------------
+
+    
+    #region ----------------------------FILTERING----------------------------
+
+    $filterSet = @() # Filter set array
+
+    if ($Category)   {$filterSet += @{'category'= @{'eq'="SAASDB_CATEGORY_$Category"}}}
+    if ($ScoreRange) {$filterSet += @{'score'=    @{'eq'=$ScoreRange}}}
+    if ($Tag)        {$filterSet += @{'tag'=      @{'eq'=$Tag}}} 
+    
+    <#
+    $body = @{
+        'skip'=$Skip;
+        'limit'=$ResultSetSize;
+        'score'=$ScoreRange;
+        'timeframe'=$TimeFrame;
+        'streamId'=$stream
+    } # Base request body
+    #>
+
+    <#
+    if ($Category) {
+        $body += @{'category'="SAASDB_CATEGORY_$Category"}
+    }
+    #>
+    
+    #endregion ----------------------------FILTERING----------------------------
 
     try {
         $response = Invoke-MCASRestMethod -Credential $Credential -Path "/cas/api/discovery/" -Method Post -Body $body
