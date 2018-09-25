@@ -1,4 +1,4 @@
-function Set-MCASDiscoveryApp {
+function Set-MCASDiscoveredApp {
     [CmdletBinding()]
     Param
     (    
