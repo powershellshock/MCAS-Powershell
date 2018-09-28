@@ -50,10 +50,12 @@ enum device_type {
     CISCO_IRONPORT_PROXY = 106          # CiscoIronPort WSA
     CISCO_SCAN_SAFE = 124               # Cisco ScanSafe
     CLAVISTER = 164                     # Clavister NGFW (Syslog)
+    FORCEPOINT = 202                    # Forcepoint Web Security Cloud
     FORTIGATE = 108                     # Fortinet Fortigate
     GENERIC_CEF = 179                   # Generic CEF log
     GENERIC_LEEF = 181                  # Generic LEEF log
     GENERIC_W3C = 183                   # Generic W3C log
+    IBOSS = 200                         # Iboss Secure Cloud Gateway
     I_FILTER = 185                      # Digital Arts i-FILTER
     JUNIPER_SRX = 129                   # Juniper SRX
     JUNIPER_SRX_SD = 172                # Juniper SRX SD
@@ -67,6 +69,7 @@ enum device_type {
     SONICWALL_SYSLOG = 160              # (Dell) SonicWALL
     SOPHOS_CYBEROAM = 162               # Sophos Cyberoam Web Filter and Firewall log
     SOPHOS_SG = 130                     # Sophos SG
+    SOPHOS_XG = 198                     # Sophos XG
     SQUID = 114                         # Squid (Common)
     SQUID_NATIVE = 155                  # Squid (Native)
     WEBSENSE_SIEM_CEF = 138             # (WebSense) Web Security solutions - Internet Activity log (CEF)
