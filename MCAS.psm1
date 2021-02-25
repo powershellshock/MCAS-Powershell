@@ -14,7 +14,14 @@ GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
 #----------------------------Constants----------------------------
 $MCAS_TOKEN_VALIDATION_PATTERN = '^[0-9a-zA-Z=]{64,192}$'
 
-
+$MCAS_VERBS_BY_URI_ROUTE = @{
+    '/api/v1/activities/' = @('Get','Post')
+    '/api/v1/alerts/' =     @('Get','Post')
+    '/api/v1/discovery/' =  @('Get','Post','Put')
+    '/api/v1/subnet/' =     @('Get','Post','Delete')
+    '/api/v1/entities/' =   @('Get','Post')
+    '/api/v1/files/' =      @('Get','Post')
+}  
 
 
 #----------------------------Enum Types----------------------------
