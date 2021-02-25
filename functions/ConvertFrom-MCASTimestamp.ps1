@@ -1,6 +1,6 @@
 <#
 .Synopsis
-    Converts an MCAS timestamp (13-digit integer or 10-digit integer) to a native date/time value of type [datetime].
+    Auto-detects MCAS integer timestamps, in epoch milliseconds (13-digit integers) or epoch seconds (10-digit integers), and converts to a native date/time value of type [datetime] in local time.
 .DESCRIPTION
     ConvertFrom-MCASTimestamp returns a System.DateTime value representing the time (localized to the Powershell session's timezone) for a timestamp value from MCAS.
 
