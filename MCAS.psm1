@@ -263,42 +263,13 @@ Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
 #----------------------------Exports---------------------------
 # Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the module manifest as the 'FunctionsToExport' value
 $ExportedCommands = @(
-    'Add-MCASAdminAccess',
     'ConvertFrom-MCASTimestamp',
     'Export-MCASBlockScript',
-    'Get-MCASAccount',
-    'Get-MCASActivity',
-    'Get-MCASActivityType',
-    'Get-MCASAdminAccess',
     'Get-MCASAlert',
-    'Get-MCASAppId',
-    'Get-MCASAppInfo',
-    'Get-MCASAppPermission',
-    'Get-MCASConfiguration',
     'Get-MCASCredential',
-    'Get-MCASDiscoveredApp',
-    'Get-MCASDiscoveryDataSource',
-    'Get-MCASDiscoverySampleLog',
-    'Get-MCASFile',
-    'Get-MCASGovernanceAction',
-    'Get-MCASIPTag',
-    'Get-MCASLogCollector',
-    'Get-MCASPolicy',
-    'Get-MCASPortalSettings',
     'Get-MCASSiemAgent',
-    'Get-MCASStream',
-    'Get-MCASSubnetCollection',
-    'Get-MCASUserGroup',
     'Install-MCASSiemAgent',
-    'New-MCASDiscoveryDataSource',
-    'New-MCASSiemAgentToken',
-    'New-MCASSubnetCollection',
-    'Remove-MCASAdminAccess',
-    'Remove-MCASDiscoveryDataSource',
-    'Remove-MCASSubnetCollection',
-    'Send-MCASDiscoveryLog',
-    'Set-MCASAlert',
-    'Set-MCASDiscoveredApp'
+    'Invoke-MCASRestMethod'
     )
 
     $ExportedCommands | ForEach-Object {
