@@ -11,7 +11,7 @@ GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
     block of code, such as simple one-liners. Thanks.
 #>
 
-# CONSTANTS
+
 $MCAS_TOKEN_VALIDATION_PATTERN = '^[0-9a-zA-Z=]{64,192}$'
 
 $MCAS_ALLOWED_VERBS = @{
@@ -31,7 +31,6 @@ $MCAS_SORT_OPTIONS = @{
 }
 
 
-# ENUMS
 enum mcas_app {
     Amazon_Web_Services = 11599
     Box = 10489
@@ -182,7 +181,6 @@ enum permission_type {
 }
 
 
-# HASH TABLES
 $IPTagsList = [ordered]@{
     Akamai_Technologies                   = '0000002d0000000000000000'
     Amazon_Web_Services                   = '000000290000000000000000'
@@ -251,16 +249,17 @@ $ReportsList = @{
     'Sensitive File Names'                   = 'file_name_dlp'
 }
 
-# Create reversed copy of the reports list hash table (keys become values and values become keys)
-$ReportsListReverse = @{}
-$ReportsList.GetEnumerator() | ForEach-Object {
-    $ReportsListReverse.Add($_.Value,$_.Key)
-}
-
 $GovernanceStatus = @{
     'Failed' = $false
     'Pending' = $null
     'Successful' = $true
+}
+
+
+# Create reversed copy of the reports list hash table (keys become values and values become keys)
+$ReportsListReverse = @{}
+$ReportsList.GetEnumerator() | ForEach-Object {
+    $ReportsListReverse.Add($_.Value,$_.Key)
 }
 
 

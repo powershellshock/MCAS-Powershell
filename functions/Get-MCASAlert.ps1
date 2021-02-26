@@ -162,8 +162,6 @@ function Get-MCASAlert {
 
             $body = @{'skip'=$Skip;'limit'=$ResultSetSize} # Base request body
 
-            #region ----------------------------SORTING----------------------------
-
             if ($SortBy -xor $SortDirection) {throw 'Error: When specifying either the -SortBy or the -SortDirection parameters, you must specify both parameters.'}
 
             # Add sort direction to request body, if specified
@@ -181,11 +179,8 @@ function Get-MCASAlert {
                     $body.Add('sortField',$SortBy.ToLower())
                 }
             }
-            #endregion ----------------------------SORTING----------------------------
 
-            #region ----------------------------FILTERING----------------------------
             <#
-
             $filterSet = @() # Filter set array
 
             # Additional parameter validations and mutexes
@@ -211,9 +206,7 @@ function Get-MCASAlert {
             if ($Source)     {$filterSet += @{'source'=         @{'eq'=$Source}}}
             if ($Read)       {$filterSet += @{'read'=           @{'eq'=$true}}}
             if ($Unread)     {$filterSet += @{'read'=           @{'eq'=$false}}}
-
             #>
-            #endregion ----------------------------FILTERING----------------------------
 
             # Get the matching items and handle errors
             try {
