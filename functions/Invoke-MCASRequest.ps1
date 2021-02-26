@@ -1,4 +1,4 @@
-﻿function Invoke-MCASRestMethod {
+﻿function Invoke-MCASRequest {
     [CmdletBinding()]
     param (
         # Specifies the credential object containing tenant as username (e.g. 'contoso.us.portal.cloudappsecurity.com') and the 64-character hexadecimal Oauth token as the password.
@@ -44,7 +44,7 @@
     $pathElements = $Path.Split('/')
     $baseUri = '/{0}/{1}/{2}/' -f $pathElements[1],$pathElements[2],$pathElements[3]  
     
-    if ($MCAS_VERBS_BY_URI_ROUTE.$baseUri -notcontains $Method) {
+    if ($MCAS_ALLOWED_VERBS.$baseUri -notcontains $Method) {
         throw "That URI or URI/method combination is not supported. The supported URIs with supported methods for each are:`n{0}" -f ($MCAS_VERBS_BY_URI_ROUTE | ConvertTo-Json)
     }
 
@@ -54,10 +54,10 @@
     Write-Verbose "Relative path is $Path"
     
     $token = $Credential.GetNetworkCredential().Password
-    Write-Verbose "OAuth token length is {0} chars" -f $token.Length
+    Write-Verbose "Authorization token length is {0} chars" -f $token.Length
 
-    $headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {"@{$_}"}    
-    #$headers = @{Authorization="Token $token"} # need to test if this will work
+    #$headers = 'Authorization = "Token {0}"' -f $token | ForEach-Object {"@{$_}"}    
+    $headers = @{Authorization="Token $token"} # need to test if this will work
     
     # Params for Invoke-WebRequest
     $requestParams = @{

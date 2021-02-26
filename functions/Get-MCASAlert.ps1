@@ -63,11 +63,11 @@ function Get-MCASAlert {
         # Specifies the number of records, from the beginning of the result set, to skip.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateScript({$_ -gt -1})]
-        [int]$Skip = 0,
+        [int]$Skip = 0
 
 
         ##### FILTER PARAMS #####
-
+        <#
         # Limits the results by severity. Possible Values: 'High','Medium','Low'.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -130,6 +130,7 @@ function Get-MCASAlert {
         # Limits the results to unread items.
         [Parameter(ParameterSetName='List', Mandatory=$false)]
         [switch]$Unread
+        #>
     )
     begin {
     }
@@ -183,6 +184,8 @@ function Get-MCASAlert {
             #endregion ----------------------------SORTING----------------------------
 
             #region ----------------------------FILTERING----------------------------
+            <#
+
             $filterSet = @() # Filter set array
 
             # Additional parameter validations and mutexes
@@ -209,6 +212,7 @@ function Get-MCASAlert {
             if ($Read)       {$filterSet += @{'read'=           @{'eq'=$true}}}
             if ($Unread)     {$filterSet += @{'read'=           @{'eq'=$false}}}
 
+            #>
             #endregion ----------------------------FILTERING----------------------------
 
             # Get the matching items and handle errors

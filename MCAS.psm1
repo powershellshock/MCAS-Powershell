@@ -1,5 +1,4 @@
 <#
-
 GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
 
     https://github.com/PoshCode/PowerShellPracticeAndStyle
@@ -8,13 +7,14 @@ GENERAL CODING STANDARDS TO BE FOLLOWED IN THIS MODULE:
 
     https://msdn.microsoft.com/en-us/library/dd878270%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396 
 
-    Exceptions to the standards are OK, especially if they improve readability for a particular
-    block of code. Thanks.
+    Exceptions to the standards are OK, especially if they improve readability/succintness for a particular
+    block of code, such as simple one-liners. Thanks.
 #>
-#----------------------------Constants----------------------------
+
+# CONSTANTS
 $MCAS_TOKEN_VALIDATION_PATTERN = '^[0-9a-zA-Z=]{64,192}$'
 
-$MCAS_VERBS_BY_URI_ROUTE = @{
+$MCAS_ALLOWED_VERBS = @{
     '/api/v1/activities/' = @('Get','Post')
     '/api/v1/alerts/' =     @('Get','Post')
     '/api/v1/discovery/' =  @('Get','Post','Put')
@@ -23,8 +23,15 @@ $MCAS_VERBS_BY_URI_ROUTE = @{
     '/api/v1/files/' =      @('Get','Post')
 }  
 
+$MCAS_SORT_OPTIONS = @{
+    '/api/v1/activities/' = @('date','created')         # https://docs.microsoft.com/en-us/cloud-app-security/api-activities-list
+    '/api/v1/alerts/' =     @('date','severity')        # https://docs.microsoft.com/en-us/cloud-app-security/api-alerts-list
+    '/api/v1/subnet/' =     @('category','tags','name') # https://docs.microsoft.com/en-us/cloud-app-security/api-data-enrichment-list
+    '/api/v1/entities/' =   @('date','severity')        # https://docs.microsoft.com/en-us/cloud-app-security/api-entities-list 
+}
 
-#----------------------------Enum Types----------------------------
+
+# ENUMS
 enum mcas_app {
     Amazon_Web_Services = 11599
     Box = 10489
@@ -175,7 +182,7 @@ enum permission_type {
 }
 
 
-#----------------------------Hash Tables---------------------------
+# HASH TABLES
 $IPTagsList = [ordered]@{
     Akamai_Technologies                   = '0000002d0000000000000000'
     Amazon_Web_Services                   = '000000290000000000000000'
@@ -257,52 +264,30 @@ $GovernanceStatus = @{
 }
 
 
-#----------------------------Include functions---------------------------
-# KUDOS to the chocolatey project for the basis of this code
+# INCLUDES (Thanks to the chocolatey project for the basis of this code)
 
 # get the path of where the module is saved (if module is at c:\myscripts\module.psm1, then c:\myscripts\)
 $mypath = (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)
 
-# find and load all the ps1 files in the Functions subfolder
-Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {
-    . $_.ProviderPath
-}
+# run the ps1 files in the Functions subfolder
+Resolve-Path -Path $mypath\Functions\*.ps1 | ForEach-Object -Process {$_.ProviderPath}
 
-
-#----------------------------Exports---------------------------
-# Cmdlets to export (must be exported as functions, not cmdlets) - This array format can be copied directly to the module manifest as the 'FunctionsToExport' value
+# EXPORTS (must be exported as functions, not cmdlets)(the below can be copied to 'FunctionsToExport' in the module manifest)
 $ExportedCommands = @(
     'ConvertFrom-MCASTimestamp',
+    'ConvertTo-MCASTimestamp',
     'Export-MCASBlockScript',
     'Get-MCASAlert',
     'Get-MCASCredential',
     'Get-MCASSiemAgent',
     'Install-MCASSiemAgent',
-    'Invoke-MCASRestMethod'
+    'Invoke-MCASRequest'
     )
 
-    $ExportedCommands | ForEach-Object {
-    Export-ModuleMember -Function $_
-}
-
-#Export-ModuleMember -Function Invoke-MCASRestMethod2
+$ExportedCommands | ForEach-Object {Export-ModuleMember -Function $_}
 
 # Vars to export (must be exported here, even if also included in the module manifest in 'VariablesToExport'
 Export-ModuleMember -Variable CASCredential
 
 # Aliases to export
 Export-ModuleMember -Alias *
-
-
-
-<#
-# Implement your module commands in this script.
-
-
-# Export only the functions using PowerShell standard verb-noun naming.
-# Be sure to list each exported functions in the FunctionsToExport field of the module manifest file.
-# This improves performance of command discovery in PowerShell.
-Export-ModuleMember -Function Get-MCASUserGroup
-
-
-#>
