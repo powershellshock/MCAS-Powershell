@@ -27,7 +27,7 @@ function ConvertFrom-MCASTimestamp {
         $Timestamp
     )
     process {
-        Write-Verbose $Timestamp.ToString().length
+        Write-Verbose 'Length of timestamp is {0} characters' -f ($Timestamp.ToString().length)
         if ($Timestamp.ToString().length -eq 13) {
             (([datetime]'1/1/1970').AddSeconds($Timestamp/1000)).ToLocalTime()
         }
